@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr" id="html-root">
 <head>
 <meta charset="UTF-8">
@@ -11,12 +11,12 @@
 <meta property="og:title" content="Documatch Lab — Diagnostic GED 2026">
 <meta property="og:description" content="Évaluez la maturité de votre système documentaire face aux réformes 2026. Diagnostic gratuit en 5 minutes.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://lab.documatch.eu">
+<meta property="og:url" content="https://documatch-eu.github.io/documatch-lab/">
 <meta property="og:locale" content="fr_FR">
 <meta property="og:locale:alternate" content="es_ES">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Documatch Lab — Diagnostic GED 2026">
-<link rel="canonical" href="https://lab.documatch.eu">
+<link rel="canonical" href="https://documatch-eu.github.io/documatch-lab/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" rel="stylesheet">
@@ -64,6 +64,9 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; font-size: 16px; }
 body { font-family: var(--font); color: var(--gray-800); background: var(--gray-50); line-height: 1.6; }
+/* Prevent flicker on lang switch */
+[data-fr], [data-es] { transition: none !important; }
+footer * { box-sizing: border-box; }
 a { text-decoration: none; color: inherit; }
 img { max-width: 100%; }
 
@@ -980,8 +983,17 @@ footer {
 ===================================================== */
 @media (max-width: 768px) {
   .header-urgency { display: none; }
-  .footer-top { grid-template-columns: 1fr 1fr; }
-  .footer-brand { grid-column: 1/-1; }
+  .footer-top {
+    grid-template-columns: 1fr !important;
+    gap: 28px;
+  }
+  .footer-brand { grid-column: 1; }
+  .footer-col { border-top: 1px solid rgba(255,255,255,0.07); padding-top: 20px; }
+  .footer-col ul li { margin-bottom: 12px; }
+  .footer-col a { font-size: 14px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .footer-legal { gap: 12px; }
+  .footer-countries { gap: 8px; }
   .quiz-top { padding: 20px 20px 14px; }
   .quiz-body { padding: 24px 20px; }
   .lead-top { padding: 24px 20px; }
@@ -994,8 +1006,10 @@ footer {
   .modal-box { padding: 28px 20px; }
 }
 @media (max-width: 480px) {
-  .footer-top { grid-template-columns: 1fr; }
   .hero { padding: 56px 16px 44px; }
+  .hero-kpis { gap: 20px; }
+  .kpi-num { font-size: 1.6rem; }
+  footer { padding: 36px 16px 20px; }
 }
 </style>
 </head>
@@ -1641,20 +1655,28 @@ let currentLang = 'fr';
 
 function setLang(lang) {
   currentLang = lang;
-  document.getElementById('html-root').lang = lang;
 
-  document.querySelectorAll('[data-fr]').forEach(el => {
-    el.style.display = lang === 'fr' ? '' : 'none';
+  // Batch all DOM updates in one frame to prevent mobile flicker
+  requestAnimationFrame(function() {
+    document.documentElement.lang = lang;
+
+    const frEls = document.querySelectorAll('[data-fr]');
+    const esEls = document.querySelectorAll('[data-es]');
+
+    if (lang === 'fr') {
+      frEls.forEach(el => { el.style.display = ''; });
+      esEls.forEach(el => { el.style.display = 'none'; });
+    } else {
+      frEls.forEach(el => { el.style.display = 'none'; });
+      esEls.forEach(el => { el.style.display = ''; });
+    }
+
+    document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+    // find clicked button
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      if (btn.textContent.trim().toLowerCase() === lang) btn.classList.add('active');
+    });
   });
-  document.querySelectorAll('[data-es]').forEach(el => {
-    el.style.display = lang === 'es' ? '' : 'none';
-  });
-
-  document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-  event.target.classList.add('active');
-
-  // Update SEO
-  document.documentElement.lang = lang;
 }
 
 // ---- MODAL ----
