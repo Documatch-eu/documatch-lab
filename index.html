@@ -1005,11 +1005,32 @@ footer {
   .steps-grid { gap: 32px; }
   .modal-box { padding: 28px 20px; }
 }
-@media (max-width: 480px) {
-  .hero { padding: 56px 16px 44px; }
-  .hero-kpis { gap: 20px; }
-  .kpi-num { font-size: 1.6rem; }
-  footer { padding: 36px 16px 20px; }
+@media(max-width:768px) {
+  #guide-modal .article-wrap {
+    grid-template-columns:1fr;
+    padding:24px 16px;
+  }
+
+  #guide-modal .sidebar {
+    position:static;
+  }
+
+  #guide-modal .article-body,
+  #guide-modal .article-body * {
+    max-width:100%;
+    overflow-wrap:break-word;
+    word-break:break-word;
+  }
+
+  #guide-modal table {
+    display:block;
+    overflow-x:auto;
+  }
+
+  #guide-modal img {
+    max-width:100%;
+    height:auto;
+  }
 }
 </style>
 </head>
