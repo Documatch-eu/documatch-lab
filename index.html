@@ -11,12 +11,12 @@
 <meta property="og:title" content="Documatch Lab — Diagnostic GED 2026">
 <meta property="og:description" content="Évaluez la maturité de votre système documentaire face aux réformes 2026. Diagnostic gratuit en 5 minutes.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://documatch-eu.github.io/documatch-lab/">
+<meta property="og:url" content="https://lab.documatch.eu">
 <meta property="og:locale" content="fr_FR">
 <meta property="og:locale:alternate" content="es_ES">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Documatch Lab — Diagnostic GED 2026">
-<link rel="canonical" href="https://documatch-eu.github.io/documatch-lab/">
+<link rel="canonical" href="https://lab.documatch.eu">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" rel="stylesheet">
@@ -64,9 +64,14 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; font-size: 16px; }
 body { font-family: var(--font); color: var(--gray-800); background: var(--gray-50); line-height: 1.6; }
-/* Prevent flicker on lang switch */
-[data-fr], [data-es] { transition: none !important; }
-footer * { box-sizing: border-box; }
+/* Lang system — no flash, no transition */
+[data-fr], [data-es] { transition: none !important; animation: none !important; }
+body.lang-fr [data-es] { display: none !important; }
+body.lang-es [data-fr] { display: none !important; }
+body.lang-fr [data-fr] { display: revert !important; }
+body.lang-es [data-es] { display: revert !important; }
+footer * { box-sizing: border-box; min-width: 0; }
+.footer-legal a { white-space: nowrap; }
 a { text-decoration: none; color: inherit; }
 img { max-width: 100%; }
 
@@ -872,9 +877,10 @@ img { max-width: 100%; }
   background: rgba(0,0,0,0.5);
   z-index: 1000;
   display: none;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  padding: 20px;
+  padding: 16px;
+  overflow-y: auto;
 }
 .modal-overlay.open { display: flex; }
 .modal-box {
@@ -882,28 +888,35 @@ img { max-width: 100%; }
   border-radius: var(--radius-xl);
   max-width: 680px;
   width: 100%;
-  max-height: 85vh;
-  overflow-y: auto;
-  padding: 40px 36px;
+  margin: auto;
+  padding: 32px 28px;
   position: relative;
 }
 .modal-close {
   position: absolute;
-  top: 16px; right: 16px;
-  width: 32px; height: 32px;
+  top: 14px; right: 14px;
+  width: 34px; height: 34px;
   border-radius: 50%;
   background: var(--gray-100);
   border: none; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   font-size: 18px; color: var(--gray-500);
   transition: background 0.2s;
+  z-index: 10;
 }
 .modal-close:hover { background: var(--gray-200); }
-.modal-box h2 { font-size: 1.3rem; font-weight: 700; color: var(--navy); margin-bottom: 20px; }
-.modal-box h3 { font-size: 1rem; font-weight: 700; color: var(--navy); margin: 18px 0 8px; }
-.modal-box p, .modal-box li { font-size: 13.5px; color: var(--gray-600); line-height: 1.7; margin-bottom: 8px; }
-.modal-box ul { padding-left: 18px; }
+.modal-box h2 { font-size: 1.2rem; font-weight: 700; color: var(--navy); margin-bottom: 18px; padding-right: 30px; }
+.modal-box h3 { font-size: 0.95rem; font-weight: 700; color: var(--navy); margin: 16px 0 7px; }
+.modal-box p, .modal-box li { font-size: 13px; color: var(--gray-600); line-height: 1.7; margin-bottom: 8px; }
+.modal-box ul { padding-left: 16px; }
 .modal-box a { color: var(--blue); text-decoration: underline; }
+@media (max-width: 480px) {
+  .modal-overlay { padding: 10px; }
+  .modal-box { padding: 24px 16px; border-radius: 14px; }
+  .modal-box h2 { font-size: 1.05rem; }
+  .modal-box h3 { font-size: 0.88rem; }
+  .modal-box p, .modal-box li { font-size: 12.5px; }
+}
 
 /* =====================================================
    FOOTER
@@ -1005,44 +1018,11 @@ footer {
   .steps-grid { gap: 32px; }
   .modal-box { padding: 28px 20px; }
 }
-@media(max-width:768px) {
-
-  #guide-modal .hero-article-inner,
-  #guide-modal .article-wrap,
-  #guide-modal .article-body,
-  #guide-modal .article-content {
-      width:100% !important;
-      max-width:100% !important;
-      margin-left:0 !important;
-      margin-right:0 !important;
-      box-sizing:border-box;
-  }
-
-  #guide-modal .article-wrap {
-    grid-template-columns:1fr;
-    padding:24px 16px;
-  }
-
-  #guide-modal .sidebar {
-    position:static;
-  }
-
-  #guide-modal .article-body,
-  #guide-modal .article-body * {
-    max-width:100%;
-    overflow-wrap:break-word;
-    word-break:break-word;
-  }
-
-  #guide-modal table {
-    display:block;
-    overflow-x:auto;
-  }
-
-  #guide-modal img {
-    max-width:100%;
-    height:auto;
-  }
+@media (max-width: 480px) {
+  .hero { padding: 56px 16px 44px; }
+  .hero-kpis { gap: 20px; }
+  .kpi-num { font-size: 1.6rem; }
+  footer { padding: 36px 16px 20px; }
 }
 </style>
 </head>
@@ -1051,7 +1031,7 @@ footer {
 <!-- ========= ANNOUNCE BAR ========= -->
 <div class="announce-bar" id="announce-bar">
   <span data-fr>⚡ <strong>Réforme GED France :</strong> obligations de facturation électronique B2B au <strong>1er septembre 2026</strong> — Évaluez votre conformité maintenant</span>
-  <span data-es style="display:none">⚡ <strong>Reforma GED Francia :</strong> obligatoriedad de facturación electrónica B2B el <strong>1 de septiembre 2026</strong> — Evalúe su conformidad ahora</span>
+  <span data-es>⚡ <strong>Reforma GED Francia :</strong> obligatoriedad de facturación electrónica B2B el <strong>1 de septiembre 2026</strong> — Evalúe su conformidad ahora</span>
 </div>
 
 <!-- ========= HEADER ========= -->
@@ -1069,7 +1049,7 @@ footer {
       <div class="header-urgency">
         <div class="pulse-dot"></div>
         <span data-fr>Réforme · 1er sept. 2026</span>
-        <span data-es style="display:none">Reforma · 1 sept. 2026</span>
+        <span data-es>Reforma · 1 sept. 2026</span>
       </div>
       <div class="lang-switcher">
         <button class="lang-btn active" onclick="setLang('fr')">FR</button>
@@ -1085,14 +1065,14 @@ footer {
     <div class="hero-eyebrow">
       <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
       <span data-fr>Diagnostic Officiel Documatch — Édition 2026</span>
-      <span data-es style="display:none">Diagnóstico Oficial Documatch — Edición 2026</span>
+      <span data-es>Diagnóstico Oficial Documatch — Edición 2026</span>
     </div>
 
     <h1 data-fr>
       Votre entreprise est-elle prête pour les<br>
       <span class="hl-amber">nouvelles obligations documentaires de 2026&nbsp;?</span>
     </h1>
-    <h1 data-es style="display:none">
+    <h1 data-es>
       ¿Su empresa está preparada para las<br>
       <span class="hl-amber">nuevas obligaciones documentales de 2026&nbsp;?</span>
     </h1>
@@ -1100,7 +1080,7 @@ footer {
     <p class="hero-sub" data-fr>
       20 questions expertes pour évaluer la maturité documentaire de votre organisation face à la facturation électronique, à l'archivage légal et aux nouvelles exigences réglementaires françaises.
     </p>
-    <p class="hero-sub" data-es style="display:none">
+    <p class="hero-sub" data-es>
       20 preguntas expertas para evaluar la madurez documental de su organización frente a la facturación electrónica, el archivo legal y las nuevas exigencias reglamentarias europeas.
     </p>
 
@@ -1108,22 +1088,22 @@ footer {
       <div class="kpi">
         <span class="kpi-num"><span>20</span></span>
         <div class="kpi-lab" data-fr>Questions expertes</div>
-        <div class="kpi-lab" data-es style="display:none">Preguntas expertas</div>
+        <div class="kpi-lab" data-es>Preguntas expertas</div>
       </div>
       <div class="kpi">
         <span class="kpi-num"><span>5</span>&nbsp;min</span>
         <div class="kpi-lab" data-fr>Durée estimée</div>
-        <div class="kpi-lab" data-es style="display:none">Duración estimada</div>
+        <div class="kpi-lab" data-es>Duración estimada</div>
       </div>
       <div class="kpi">
         <span class="kpi-num">100%</span>
         <div class="kpi-lab" data-fr>Gratuit & confidentiel</div>
-        <div class="kpi-lab" data-es style="display:none">Gratuito y confidencial</div>
+        <div class="kpi-lab" data-es>Gratuito y confidencial</div>
       </div>
       <div class="kpi">
         <span class="kpi-num">+200</span>
         <div class="kpi-lab" data-fr>Solutions GED & DMS comparées</div>
-        <div class="kpi-lab" data-es style="display:none">Soluciones GED & DMS comparadas</div>
+        <div class="kpi-lab" data-es>Soluciones GED & DMS comparadas</div>
       </div>
     </div>
 
@@ -1132,66 +1112,66 @@ footer {
       <div style="display:flex; gap:10px; align-items:flex-start;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" style="flex-shrink:0; margin-top:2px;"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
         <span data-fr style="font-size:13px; color:rgba(255,255,255,0.8); line-height:1.6;">À partir du <strong style="color:#fbbf24;">1er septembre 2026</strong>, toutes les entreprises françaises devront être capables de recevoir des factures électroniques. Les entreprises non préparées devront adapter leurs processus, leurs outils et leur gouvernance documentaire.</span>
-        <span data-es style="display:none; font-size:13px; color:rgba(255,255,255,0.8); line-height:1.6;">A partir del <strong style="color:#fbbf24;">1 de septiembre de 2026</strong>, todas las empresas francesas deberán poder recibir facturas electrónicas. Las empresas no preparadas deberán adaptar sus procesos, herramientas y gobernanza documental.</span>
+        <span data-es style="font-size:13px; color:rgba(255,255,255,0.8); line-height:1.6;">A partir de <strong style="color:#fbbf24;">enero 2026</strong>, todas las empresas y autónomos españoles deberán emitir y recibir facturas electrónicas B2B (Ley Crea y Crece). Las empresas no preparadas deberán adaptar sus procesos, herramientas y gobernanza documental urgentemente.</span>
       </div>
     </div>
 
     <!-- RESULTS PREVIEW -->
     <div style="max-width:680px; margin:0 auto 28px; text-align:left;">
       <p style="font-size:12px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.4); margin-bottom:12px;" data-fr>À la fin du diagnostic, obtenez :</p>
-      <p style="font-size:12px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.4); margin-bottom:12px;" data-es style="display:none">Al final del diagnóstico, obtenga :</p>
+      <p style="font-size:12px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.4); margin-bottom:12px;" data-es>Al final del diagnóstico, obtenga :</p>
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
         <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:rgba(255,255,255,0.75);">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
           <span data-fr>Score de maturité documentaire (/100)</span>
-          <span data-es style="display:none">Puntuación de madurez documental (/100)</span>
+          <span data-es>Puntuación de madurez documental (/100)</span>
         </div>
         <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:rgba(255,255,255,0.75);">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
           <span data-fr>Niveau de préparation à la facturation électronique</span>
-          <span data-es style="display:none">Nivel de preparación para la facturación electrónica</span>
+          <span data-es>Nivel de preparación para la facturación electrónica</span>
         </div>
         <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:rgba(255,255,255,0.75);">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
           <span data-fr>Risques prioritaires identifiés</span>
-          <span data-es style="display:none">Riesgos prioritarios identificados</span>
+          <span data-es>Riesgos prioritarios identificados</span>
         </div>
         <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:rgba(255,255,255,0.75);">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
           <span data-fr>Recommandations parmi +200 solutions référencées</span>
-          <span data-es style="display:none">Recomendaciones entre +200 soluciones referenciadas</span>
+          <span data-es>Recomendaciones entre +200 soluciones referenciadas</span>
         </div>
       </div>
     </div>
 
     <button class="btn-hero" onclick="startQuiz()">
       <span data-fr>Évaluer ma maturité documentaire</span>
-      <span data-es style="display:none">Evaluar mi madurez documental</span>
+      <span data-es>Evaluar mi madurez documental</span>
       <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
     </button>
 
     <!-- POSITIONING LINE -->
     <p style="font-size:12px; color:rgba(255,255,255,0.35); margin-top:14px; margin-bottom:20px;">
       <span data-fr>Réalisé par <a href="https://www.documatch.eu" target="_blank" style="color:rgba(255,255,255,0.55); text-decoration:underline;">Documatch.eu</a>, la plateforme indépendante de comparaison des solutions GED, DMS, archivage électronique et facturation électronique.</span>
-      <span data-es style="display:none">Realizado por <a href="https://www.documatch.eu" target="_blank" style="color:rgba(255,255,255,0.55); text-decoration:underline;">Documatch.eu</a>, la plataforma independiente de comparación de soluciones GED, DMS, archivo electrónico y facturación electrónica.</span>
+      <span data-es>Realizado por <a href="https://www.documatch.eu" target="_blank" style="color:rgba(255,255,255,0.55); text-decoration:underline;">Documatch.eu</a>, la plataforma independiente de comparación de soluciones GED, DMS, archivo electrónico y facturación electrónica.</span>
     </p>
 
     <div class="hero-trust">
       <span class="trust-item">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-        <span data-fr>Conforme RGPD</span><span data-es style="display:none">Cumplimiento RGPD</span>
+        <span data-fr>Conforme RGPD</span><span data-es>Cumplimiento RGPD</span>
       </span>
       <span class="trust-item">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-        <span data-fr>Données sécurisées</span><span data-es style="display:none">Datos seguros</span>
+        <span data-fr>Données sécurisées</span><span data-es>Datos seguros</span>
       </span>
       <span class="trust-item">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-        <span data-fr>Aucune inscription requise</span><span data-es style="display:none">Sin registro previo</span>
+        <span data-fr>Aucune inscription requise</span><span data-es>Sin registro previo</span>
       </span>
       <span class="trust-item">
         <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-        <span data-fr>Comparateur 100% indépendant</span><span data-es style="display:none">Comparador 100% independiente</span>
+        <span data-fr>Comparateur 100% indépendant</span><span data-es>Comparador 100% independiente</span>
       </span>
     </div>
   </div>
@@ -1202,38 +1182,38 @@ footer {
   <div class="container">
     <div class="text-center">
       <div class="section-tag" data-fr>Comment ça fonctionne</div>
-      <div class="section-tag" data-es style="display:none">Cómo funciona</div>
+      <div class="section-tag" data-es>Cómo funciona</div>
       <h2 class="section-title" data-fr>Un diagnostic en 4 étapes</h2>
-      <h2 class="section-title" data-es style="display:none">Un diagnóstico en 4 pasos</h2>
+      <h2 class="section-title" data-es>Un diagnóstico en 4 pasos</h2>
     </div>
     <div class="steps-grid">
       <div class="step">
         <div class="step-num">1</div>
         <h4 data-fr>Répondez aux 20 questions</h4>
-        <h4 data-es style="display:none">Responda las 20 preguntas</h4>
+        <h4 data-es>Responda las 20 preguntas</h4>
         <p data-fr>Profil, système actuel, conformité légale, intégrations ERP et maturité projet — en 5 minutes chrono.</p>
-        <p data-es style="display:none">Perfil, sistema actual, cumplimiento legal, integraciones ERP y madurez del proyecto — en 5 minutos.</p>
+        <p data-es>Perfil, sistema actual, cumplimiento legal, integraciones ERP y madurez del proyecto — en 5 minutos.</p>
       </div>
       <div class="step">
         <div class="step-num">2</div>
         <h4 data-fr>Renseignez vos coordonnées</h4>
-        <h4 data-es style="display:none">Introduzca sus datos</h4>
+        <h4 data-es>Introduzca sus datos</h4>
         <p data-fr>Pour recevoir votre rapport personnalisé et être mis en relation avec les meilleures solutions adaptées.</p>
-        <p data-es style="display:none">Para recibir su informe personalizado y ser conectado con las mejores soluciones adaptadas.</p>
+        <p data-es>Para recibir su informe personalizado y ser conectado con las mejores soluciones adaptadas.</p>
       </div>
       <div class="step">
         <div class="step-num">3</div>
         <h4 data-fr>Obtenez votre score de maturité</h4>
-        <h4 data-es style="display:none">Obtenga su puntuación de madurez</h4>
+        <h4 data-es>Obtenga su puntuación de madurez</h4>
         <p data-fr>Score sur 100, analyse par axe et recommandations prioritaires personnalisées pour votre profil.</p>
-        <p data-es style="display:none">Puntuación sobre 100, análisis por eje y recomendaciones prioritarias personalizadas para su perfil.</p>
+        <p data-es>Puntuación sobre 100, análisis por eje y recomendaciones prioritarias personalizadas para su perfil.</p>
       </div>
       <div class="step">
         <div class="step-num">4</div>
         <h4 data-fr>Comparez les meilleures solutions</h4>
-        <h4 data-es style="display:none">Compare las mejores soluciones</h4>
+        <h4 data-es>Compare las mejores soluciones</h4>
         <p data-fr>Accédez au comparateur Documatch.eu et prenez la meilleure décision avant le 1er septembre 2026.</p>
-        <p data-es style="display:none">Acceda al comparador Documatch.eu y tome la mejor decisión antes del 1 de septiembre de 2026.</p>
+        <p data-es>Acceda al comparador Documatch.eu y tome la mejor decisión antes de enero 2026 (Ley Crea y Crece) o septiembre 2026 (Francia).</p>
       </div>
     </div>
   </div>
@@ -1244,11 +1224,11 @@ footer {
   <div class="container">
     <div class="text-center" style="margin-bottom:0">
       <div class="section-tag" data-fr>Pourquoi ce diagnostic ?</div>
-      <div class="section-tag" data-es style="display:none">¿Por qué este diagnóstico?</div>
+      <div class="section-tag" data-es>¿Por qué este diagnóstico?</div>
       <h2 class="section-title" data-fr>La réforme documentaire 2026 vous concerne directement</h2>
-      <h2 class="section-title" data-es style="display:none">La reforma documental 2026 le afecta directamente</h2>
+      <h2 class="section-title" data-es>La reforma documental 2026 le afecta directamente en España y en Europa</h2>
       <p class="section-sub mx-auto" data-fr>À partir du 1er septembre 2026, la facturation électronique B2B devient obligatoire en France. Les organisations non conformes s'exposent à des pénalités financières et à un risque opérationnel majeur. Êtes-vous prêt&nbsp;?</p>
-      <p class="section-sub mx-auto" data-es style="display:none">A partir del 1 de septiembre de 2026, la facturación electrónica B2B será obligatoria en Francia. Las organizaciones no conformes se exponen a sanciones financieras y a un riesgo operativo importante. ¿Está preparado?</p>
+      <p class="section-sub mx-auto" data-es>La <strong>Ley Crea y Crece</strong> impone la facturación electrónica B2B obligatoria en España desde enero 2026, y Francia aplica su propia reforma desde septiembre 2026. Las organizaciones no conformes se exponen a sanciones financieras y a un riesgo operativo importante. ¿Está preparado?</p>
     </div>
     <div class="features-grid" style="margin-top:40px">
       <div class="feat-card">
@@ -1256,36 +1236,36 @@ footer {
           <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
         </div>
         <h3 data-fr>Conformité réglementaire</h3>
-        <h3 data-es style="display:none">Conformidad reglamentaria</h3>
+        <h3 data-es>Conformidad reglamentaria</h3>
         <p data-fr>Réforme e-invoicing, PPF, PDP agréés, e-reporting — identifiez vos lacunes avant l'échéance légale.</p>
-        <p data-es style="display:none">Reforma e-invoicing, PPF, PDP homologados, e-reporting — identifique sus carencias antes del plazo legal.</p>
+        <p data-es>Ley Crea y Crece, FACe, FACeB2B, ESF homologados, FacturaE 3.2.x — identifique sus carencias antes del plazo legal.</p>
       </div>
       <div class="feat-card">
         <div class="feat-icon">
           <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
         </div>
         <h3 data-fr>Efficacité opérationnelle</h3>
-        <h3 data-es style="display:none">Eficiencia operacional</h3>
+        <h3 data-es>Eficiencia operacional</h3>
         <p data-fr>Identifiez les gains de productivité concrets : workflows, LAD/RAD, intégration ERP, recherche documentaire.</p>
-        <p data-es style="display:none">Identifique las ganancias de productividad concretas: workflows, LAD/RAD, integración ERP, búsqueda documental.</p>
+        <p data-es>Identifique las ganancias de productividad concretas: workflows, LAD/RAD, integración ERP, búsqueda documental.</p>
       </div>
       <div class="feat-card">
         <div class="feat-icon">
           <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
         </div>
         <h3 data-fr>Comparaison de solutions</h3>
-        <h3 data-es style="display:none">Comparación de soluciones</h3>
+        <h3 data-es>Comparación de soluciones</h3>
         <p data-fr>+200 solutions GED évaluées. Recevez un shortlist personnalisé adapté à votre secteur, taille et ERP existant.</p>
-        <p data-es style="display:none">+200 soluciones GED evaluadas. Reciba un shortlist personalizado adaptado a su sector, tamaño y ERP existente.</p>
+        <p data-es>+200 soluciones GED evaluadas. Reciba un shortlist personalizado adaptado a su sector, tamaño y ERP existente.</p>
       </div>
       <div class="feat-card">
         <div class="feat-icon">
           <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0"/></svg>
         </div>
         <h3 data-fr>Conseil expert indépendant</h3>
-        <h3 data-es style="display:none">Asesoramiento experto independiente</h3>
+        <h3 data-es>Asesoramiento experto independiente</h3>
         <p data-fr>Documatch.eu ne vend aucune solution. Notre rôle est de vous guider vers le meilleur choix pour votre organisation.</p>
-        <p data-es style="display:none">Documatch.eu no vende ninguna solución. Nuestro papel es guiarle hacia la mejor elección para su organización.</p>
+        <p data-es>Documatch.eu no vende ninguna solución. Nuestro papel es guiarle hacia la mejor elección para su organización.</p>
       </div>
     </div>
   </div>
@@ -1317,40 +1297,40 @@ footer {
     <div class="lead-wrap fade-in">
       <div class="lead-top">
         <h2 data-fr>Votre diagnostic est prêt !</h2>
-        <h2 data-es style="display:none">¡Su diagnóstico está listo!</h2>
+        <h2 data-es>¡Su diagnóstico está listo!</h2>
         <p data-fr>Renseignez vos coordonnées pour accéder à votre score de maturité GED, l'analyse détaillée et les recommandations de solutions adaptées à votre profil.</p>
-        <p data-es style="display:none">Introduzca sus datos para acceder a su puntuación de madurez GED, el análisis detallado y las recomendaciones de soluciones adaptadas a su perfil.</p>
+        <p data-es>Introduzca sus datos para acceder a su puntuación de madurez GED, el análisis detallado y las recomendaciones de soluciones adaptadas a su perfil.</p>
       </div>
       <div class="lead-body">
         <div class="form-row">
           <div class="form-group">
             <label class="form-label" data-fr>Prénom *</label>
-            <label class="form-label" data-es style="display:none">Nombre *</label>
+            <label class="form-label" data-es>Nombre *</label>
             <input type="text" class="form-input" id="lead-firstname" placeholder="Marie / María">
           </div>
           <div class="form-group">
             <label class="form-label" data-fr>Nom *</label>
-            <label class="form-label" data-es style="display:none">Apellido *</label>
+            <label class="form-label" data-es>Apellido *</label>
             <input type="text" class="form-input" id="lead-lastname" placeholder="Dupont / García">
           </div>
         </div>
         <div class="form-group">
           <label class="form-label" data-fr>Email professionnel *</label>
-          <label class="form-label" data-es style="display:none">Email profesional *</label>
+          <label class="form-label" data-es>Email profesional *</label>
           <input type="email" class="form-input" id="lead-email" placeholder="prenom.nom@entreprise.fr">
         </div>
         <div class="form-group">
           <label class="form-label" data-fr>Société *</label>
-          <label class="form-label" data-es style="display:none">Empresa *</label>
+          <label class="form-label" data-es>Empresa *</label>
           <input type="text" class="form-input" id="lead-company" placeholder="Nom de votre entreprise / Nombre de su empresa">
         </div>
         <div class="form-row">
           <div class="form-group">
             <label class="form-label" data-fr>Fonction *</label>
-            <label class="form-label" data-es style="display:none">Cargo *</label>
+            <label class="form-label" data-es>Cargo *</label>
             <select class="form-select" id="lead-role">
               <option value="" data-fr>Sélectionner...</option>
-              <option value="" data-es style="display:none">Seleccionar...</option>
+              <option value="" data-es>Seleccionar...</option>
               <option value="CEO">CEO / Directeur Général / Director General</option>
               <option value="DAF">DAF / Directeur Financier / Director Financiero</option>
               <option value="DSI">DSI / Director de SI / CIO</option>
@@ -1363,13 +1343,13 @@ footer {
           </div>
           <div class="form-group">
             <label class="form-label" data-fr>Téléphone</label>
-            <label class="form-label" data-es style="display:none">Teléfono</label>
+            <label class="form-label" data-es>Teléfono</label>
             <input type="tel" class="form-input" id="lead-phone" placeholder="+33 6 / +34 6">
           </div>
         </div>
         <div class="form-group">
           <label class="form-label" data-fr>Pays</label>
-          <label class="form-label" data-es style="display:none">País</label>
+          <label class="form-label" data-es>País</label>
           <select class="form-select" id="lead-country">
             <option>France</option>
             <option>Espagne / España</option>
@@ -1382,13 +1362,13 @@ footer {
         </div>
         <button class="btn-submit" onclick="submitLead()">
           <span data-fr>Accéder à mon rapport de conformité</span>
-          <span data-es style="display:none">Acceder a mi informe de conformidad</span>
+          <span data-es>Acceder a mi informe de conformidad</span>
           <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
         </button>
         <div class="privacy-note">
           <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
           <span data-fr>Vos données sont traitées de façon sécurisée conformément au RGPD. Elles ne sont jamais revendues à des tiers. En soumettant ce formulaire, vous acceptez d'être contacté par Documatch.eu concernant votre projet GED. Vous pouvez vous désabonner à tout moment. <a href="#" onclick="openModal('rgpd-modal'); return false;">En savoir plus</a>.</span>
-          <span data-es style="display:none">Sus datos se tratan de forma segura según el RGPD. Nunca se revenden a terceros. Al enviar este formulario, acepta ser contactado por Documatch.eu sobre su proyecto GED. Puede cancelar la suscripción en cualquier momento. <a href="#" onclick="openModal('rgpd-modal'); return false;">Más información</a>.</span>
+          <span data-es>Sus datos se tratan de forma segura según el RGPD. Nunca se revenden a terceros. Al enviar este formulario, acepta ser contactado por Documatch.eu sobre su proyecto GED. Puede cancelar la suscripción en cualquier momento. <a href="#" onclick="openModal('rgpd-modal'); return false;">Más información</a>.</span>
         </div>
         <div class="trust-badges">
           <div class="trust-badge">
@@ -1442,18 +1422,18 @@ footer {
 
       <div class="cta-card">
         <h3 data-fr>Trouvez la solution GED idéale pour votre organisation</h3>
-        <h3 data-es style="display:none">Encuentre la solución GED ideal para su organización</h3>
+        <h3 data-es>Encuentre la solución GED ideal para su organización</h3>
         <p data-fr>Documatch.eu compare +200 solutions GED/DMS certifiées pour la France, l'Espagne et l'Europe. Accédez au comparateur et aux avis d'experts pour prendre la meilleure décision avant le 1er septembre 2026.</p>
-        <p data-es style="display:none">Documatch.eu compara +200 soluciones GED/DMS certificadas para Francia, España y Europa. Acceda al comparador y a las opiniones de expertos para tomar la mejor decisión antes del 1 de septiembre de 2026.</p>
+        <p data-es>Documatch.eu compara +200 soluciones GED/DMS certificadas para Francia, España y Europa. Acceda al comparador y a las opiniones de expertos para tomar la mejor decisión antes del 1 de septiembre de 2026.</p>
         <div class="cta-btns">
           <a href="https://www.documatch.eu" target="_blank" class="btn-cta-prim">
             <span data-fr>Comparer les solutions GED</span>
-            <span data-es style="display:none">Comparar soluciones GED</span>
+            <span data-es>Comparar soluciones GED</span>
             →
           </a>
           <a href="mailto:info@documatch.eu" class="btn-cta-sec">
             <span data-fr>Parler à un expert</span>
-            <span data-es style="display:none">Hablar con un experto</span>
+            <span data-es>Hablar con un experto</span>
           </a>
         </div>
       </div>
@@ -1461,7 +1441,7 @@ footer {
       <div style="text-align:center; margin-top:16px">
         <button onclick="restartQuiz()" style="background:none; border:none; color:var(--gray-400); font-size:13px; cursor:pointer; text-decoration:underline; font-family:var(--font)">
           <span data-fr>Refaire le diagnostic</span>
-          <span data-es style="display:none">Repetir el diagnóstico</span>
+          <span data-es>Repetir el diagnóstico</span>
         </button>
       </div>
     </div>
@@ -1473,26 +1453,52 @@ footer {
 <div class="modal-overlay" id="rgpd-modal">
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal('rgpd-modal')">✕</button>
-    <h2>Politique de confidentialité — Datenschutz / Politique de données</h2>
-    <h3>1. Responsable du traitement</h3>
-    <p>Documatch.eu — <a href="mailto:info@documatch.eu">info@documatch.eu</a> — Espagne (opérant en France, Espagne, Belgique, Suisse, Luxembourg et Royaume-Uni).</p>
-    <h3>2. Données collectées</h3>
-    <p>Prénom, nom, email professionnel, société, fonction, téléphone (optionnel), pays. Également les réponses au questionnaire de diagnostic, traitées de façon anonymisée pour des statistiques sectorielles.</p>
-    <h3>3. Finalités du traitement</h3>
-    <ul>
-      <li>Envoi du rapport de maturité GED personnalisé</li>
-      <li>Accompagnement dans la sélection d'une solution GED adaptée</li>
-      <li>Communication commerciale de Documatch.eu (avec possibilité de désinscription)</li>
-      <li>Amélioration du service de comparaison</li>
-    </ul>
-    <h3>4. Base légale</h3>
-    <p>Consentement explicite (Art. 6.1.a RGPD) et intérêt légitime pour la prospection B2B (Art. 6.1.f RGPD).</p>
-    <h3>5. Conservation des données</h3>
-    <p>3 ans à compter du dernier contact, puis archivage ou suppression.</p>
-    <h3>6. Vos droits</h3>
-    <p>Accès, rectification, suppression, opposition, portabilité — exercez vos droits à <a href="mailto:info@documatch.eu">info@documatch.eu</a>. Vous pouvez également introduire une réclamation auprès de la CNIL (France) ou de l'AEPD (Espagne).</p>
-    <h3>7. Transferts</h3>
-    <p>Vos données ne sont pas transmises à des tiers à des fins commerciales. Un sous-traitant d'envoi d'emails (service conforme RGPD) peut accéder aux données strictement nécessaires à l'envoi du rapport.</p>
+    <!-- FR -->
+    <div data-fr>
+      <h2>Politique de confidentialité</h2>
+      <h3>1. Responsable du traitement</h3>
+      <p>Documatch.eu — <a href="mailto:info@documatch.eu">info@documatch.eu</a> — Espagne (opérant en France, Espagne, Belgique, Suisse, Luxembourg et Royaume-Uni).</p>
+      <h3>2. Données collectées</h3>
+      <p>Prénom, nom, email professionnel, société, fonction, téléphone (optionnel), pays. Également les réponses au questionnaire de diagnostic, traitées de façon anonymisée pour des statistiques sectorielles.</p>
+      <h3>3. Finalités du traitement</h3>
+      <ul>
+        <li>Envoi du rapport de maturité GED personnalisé</li>
+        <li>Accompagnement dans la sélection d'une solution GED adaptée</li>
+        <li>Communication commerciale de Documatch.eu (avec possibilité de désinscription)</li>
+        <li>Amélioration du service de comparaison</li>
+      </ul>
+      <h3>4. Base légale</h3>
+      <p>Consentement explicite (Art. 6.1.a RGPD) et intérêt légitime pour la prospection B2B (Art. 6.1.f RGPD).</p>
+      <h3>5. Conservation des données</h3>
+      <p>3 ans à compter du dernier contact, puis archivage ou suppression.</p>
+      <h3>6. Vos droits</h3>
+      <p>Accès, rectification, suppression, opposition, portabilité — exercez vos droits à <a href="mailto:info@documatch.eu">info@documatch.eu</a>. Vous pouvez également introduire une réclamation auprès de la CNIL (France) ou de l'AEPD (Espagne).</p>
+      <h3>7. Transferts</h3>
+      <p>Vos données ne sont pas transmises à des tiers à des fins commerciales. Un sous-traitant d'envoi d'emails (service conforme RGPD) peut accéder aux données strictement nécessaires à l'envoi du rapport.</p>
+    </div>
+    <!-- ES -->
+    <div data-es>
+      <h2>Política de privacidad</h2>
+      <h3>1. Responsable del tratamiento</h3>
+      <p>Documatch.eu — <a href="mailto:info@documatch.eu">info@documatch.eu</a> — España (operando en Francia, España, Bélgica, Suiza, Luxemburgo y Reino Unido).</p>
+      <h3>2. Datos recogidos</h3>
+      <p>Nombre, apellido, email profesional, empresa, cargo, teléfono (opcional), país. También las respuestas al cuestionario de diagnóstico, tratadas de forma anónima para estadísticas sectoriales.</p>
+      <h3>3. Finalidades del tratamiento</h3>
+      <ul>
+        <li>Envío del informe de madurez GED personalizado</li>
+        <li>Acompañamiento en la selección de una solución GED adaptada</li>
+        <li>Comunicación comercial de Documatch.eu (con posibilidad de baja)</li>
+        <li>Mejora del servicio de comparación</li>
+      </ul>
+      <h3>4. Base legal</h3>
+      <p>Consentimiento explícito (Art. 6.1.a RGPD) e interés legítimo para la prospección B2B (Art. 6.1.f RGPD).</p>
+      <h3>5. Conservación de datos</h3>
+      <p>3 años desde el último contacto, luego archivo o eliminación.</p>
+      <h3>6. Sus derechos</h3>
+      <p>Acceso, rectificación, supresión, oposición, portabilidad — ejerza sus derechos en <a href="mailto:info@documatch.eu">info@documatch.eu</a>. También puede presentar una reclamación ante la CNIL (Francia) o la AEPD (España).</p>
+      <h3>7. Transferencias</h3>
+      <p>Sus datos no se transmiten a terceros con fines comerciales. Un subcontratista de envío de emails (servicio conforme al RGPD) puede acceder a los datos estrictamente necesarios para el envío del informe.</p>
+    </div>
   </div>
 </div>
 
@@ -1500,19 +1506,38 @@ footer {
 <div class="modal-overlay" id="cgu-modal">
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal('cgu-modal')">✕</button>
-    <h2>Conditions Générales d'Utilisation</h2>
-    <h3>1. Objet</h3>
-    <p>Les présentes CGU régissent l'utilisation du service de diagnostic GED proposé gratuitement par Documatch.eu sur la plateforme Documatch Lab.</p>
-    <h3>2. Service</h3>
-    <p>Documatch Lab est un outil d'évaluation indicatif. Les résultats produits sont donnés à titre informatif et ne constituent pas un avis juridique, fiscal ou de conformité réglementaire certifié.</p>
-    <h3>3. Propriété intellectuelle</h3>
-    <p>L'ensemble du contenu (questions, méthodologie de scoring, recommandations) est la propriété exclusive de Documatch.eu. Toute reproduction est interdite sans autorisation écrite préalable.</p>
-    <h3>4. Responsabilité</h3>
-    <p>Documatch.eu ne saurait être tenu responsable des décisions prises sur la base des résultats du diagnostic. L'utilisateur reste seul responsable de ses choix de mise en conformité.</p>
-    <h3>5. Droit applicable</h3>
-    <p>Les présentes CGU sont soumises au droit espagnol. En cas de litige, les tribunaux de Séville (Espagne) sont seuls compétents.</p>
-    <h3>6. Contact</h3>
-    <p><a href="mailto:info@documatch.eu">info@documatch.eu</a> — <a href="https://www.documatch.eu" target="_blank">www.documatch.eu</a></p>
+    <!-- FR -->
+    <div data-fr>
+      <h2>Conditions Générales d'Utilisation</h2>
+      <h3>1. Objet</h3>
+      <p>Les présentes CGU régissent l'utilisation du service de diagnostic GED proposé gratuitement par Documatch.eu sur la plateforme Documatch Lab.</p>
+      <h3>2. Service</h3>
+      <p>Documatch Lab est un outil d'évaluation indicatif. Les résultats produits sont donnés à titre informatif et ne constituent pas un avis juridique, fiscal ou de conformité réglementaire certifié.</p>
+      <h3>3. Propriété intellectuelle</h3>
+      <p>L'ensemble du contenu (questions, méthodologie de scoring, recommandations) est la propriété exclusive de Documatch.eu. Toute reproduction est interdite sans autorisation écrite préalable.</p>
+      <h3>4. Responsabilité</h3>
+      <p>Documatch.eu ne saurait être tenu responsable des décisions prises sur la base des résultats du diagnostic. L'utilisateur reste seul responsable de ses choix de mise en conformité.</p>
+      <h3>5. Droit applicable</h3>
+      <p>Les présentes CGU sont soumises au droit espagnol. En cas de litige, les tribunaux de Bayonne sont seuls compétents.</p>
+      <h3>6. Contact</h3>
+      <p><a href="mailto:info@documatch.eu">info@documatch.eu</a> — <a href="https://www.documatch.eu" target="_blank">www.documatch.eu</a></p>
+    </div>
+    <!-- ES -->
+    <div data-es>
+      <h2>Condiciones Generales de Uso</h2>
+      <h3>1. Objeto</h3>
+      <p>Las presentes CGU rigen el uso del servicio de diagnóstico GED ofrecido gratuitamente por Documatch.eu en la plataforma Documatch Lab.</p>
+      <h3>2. Servicio</h3>
+      <p>Documatch Lab es una herramienta de evaluación indicativa. Los resultados producidos se ofrecen a título informativo y no constituyen un asesoramiento jurídico, fiscal o de conformidad reglamentaria certificado.</p>
+      <h3>3. Propiedad intelectual</h3>
+      <p>El conjunto del contenido (preguntas, metodología de puntuación, recomendaciones) es propiedad exclusiva de Documatch.eu. Queda prohibida cualquier reproducción sin autorización escrita previa.</p>
+      <h3>4. Responsabilidad</h3>
+      <p>Documatch.eu no podrá ser considerado responsable de las decisiones tomadas en base a los resultados del diagnóstico. El usuario es el único responsable de sus decisiones de conformidad.</p>
+      <h3>5. Derecho aplicable</h3>
+      <p>Las presentes CGU están sujetas al derecho español. En caso de litigio, los tribunales de Bayona serán los únicos competentes.</p>
+      <h3>6. Contacto</h3>
+      <p><a href="mailto:info@documatch.eu">info@documatch.eu</a> — <a href="https://www.documatch.eu" target="_blank">www.documatch.eu</a></p>
+    </div>
   </div>
 </div>
 
@@ -1520,17 +1545,34 @@ footer {
 <div class="modal-overlay" id="cookies-modal">
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal('cookies-modal')">✕</button>
-    <h2>Politique Cookies</h2>
-    <h3>Cookies strictement nécessaires</h3>
-    <p>Ces cookies sont indispensables au fonctionnement du site (préférences de langue, session de diagnostic). Ils ne peuvent pas être refusés.</p>
-    <h3>Cookies analytiques (optionnels)</h3>
-    <p>Nous utilisons des cookies analytiques anonymes (statistiques de visite) pour améliorer nos services. Vous pouvez les refuser via le bandeau de consentement.</p>
-    <h3>Pas de cookies publicitaires</h3>
-    <p>Documatch.eu n'utilise aucun cookie de ciblage publicitaire ou de retargeting. Aucun cookie tiers à des fins commerciales n'est déposé.</p>
-    <h3>Durée de conservation</h3>
-    <p>Les cookies analytiques sont conservés 13 mois maximum conformément aux recommandations CNIL.</p>
-    <h3>Gérer vos préférences</h3>
-    <p>Vous pouvez modifier vos préférences cookies à tout moment en contactant <a href="mailto:info@documatch.eu">info@documatch.eu</a> ou en supprimant les cookies de votre navigateur.</p>
+    <!-- FR -->
+    <div data-fr>
+      <h2>Politique Cookies</h2>
+      <h3>Cookies strictement nécessaires</h3>
+      <p>Ces cookies sont indispensables au fonctionnement du site (préférences de langue, session de diagnostic). Ils ne peuvent pas être refusés.</p>
+      <h3>Cookies analytiques (optionnels)</h3>
+      <p>Nous utilisons des cookies analytiques anonymes (statistiques de visite) pour améliorer nos services. Vous pouvez les refuser via le bandeau de consentement.</p>
+      <h3>Pas de cookies publicitaires</h3>
+      <p>Documatch.eu n'utilise aucun cookie de ciblage publicitaire ou de retargeting. Aucun cookie tiers à des fins commerciales n'est déposé.</p>
+      <h3>Durée de conservation</h3>
+      <p>Les cookies analytiques sont conservés 13 mois maximum conformément aux recommandations CNIL.</p>
+      <h3>Gérer vos préférences</h3>
+      <p>Vous pouvez modifier vos préférences cookies à tout moment en contactant <a href="mailto:info@documatch.eu">info@documatch.eu</a> ou en supprimant les cookies de votre navigateur.</p>
+    </div>
+    <!-- ES -->
+    <div data-es>
+      <h2>Política de Cookies</h2>
+      <h3>Cookies estrictamente necesarias</h3>
+      <p>Estas cookies son imprescindibles para el funcionamiento del sitio (preferencias de idioma, sesión de diagnóstico). No pueden ser rechazadas.</p>
+      <h3>Cookies analíticas (opcionales)</h3>
+      <p>Utilizamos cookies analíticas anónimas (estadísticas de visita) para mejorar nuestros servicios. Puede rechazarlas a través del banner de consentimiento.</p>
+      <h3>Sin cookies publicitarias</h3>
+      <p>Documatch.eu no utiliza ninguna cookie de segmentación publicitaria ni de retargeting. No se deposita ninguna cookie de terceros con fines comerciales.</p>
+      <h3>Duración de conservación</h3>
+      <p>Las cookies analíticas se conservan un máximo de 13 meses conforme a las recomendaciones de la CNIL.</p>
+      <h3>Gestionar sus preferencias</h3>
+      <p>Puede modificar sus preferencias de cookies en cualquier momento contactando con <a href="mailto:info@documatch.eu">info@documatch.eu</a> o eliminando las cookies de su navegador.</p>
+    </div>
   </div>
 </div>
 
@@ -1559,7 +1601,7 @@ footer {
     </div>
 
     <!-- VERSION ES -->
-    <div data-es style="display:none">
+    <div data-es>
       <h2>Aviso legal</h2>
       <h3>Editor del sitio</h3>
       <p>Documatch es un servicio de comparación de soluciones de gestión electrónica de documentos destinado a empresas.</p>
@@ -1584,16 +1626,16 @@ footer {
 <div id="cookie-banner" style="display:none">
   <div>
     <div class="cookie-title" data-fr>🍪 Ce site utilise des cookies</div>
-    <div class="cookie-title" data-es style="display:none">🍪 Este sitio utiliza cookies</div>
+    <div class="cookie-title" data-es>🍪 Este sitio utiliza cookies</div>
     <div class="cookie-text" data-fr>Nous utilisons des cookies analytiques anonymes pour améliorer votre expérience. Aucun cookie publicitaire n'est déposé. <a href="#" onclick="openModal('cookies-modal'); return false;">En savoir plus</a></div>
-    <div class="cookie-text" data-es style="display:none">Utilizamos cookies analíticas anónimas para mejorar su experiencia. No se utilizan cookies publicitarias. <a href="#" onclick="openModal('cookies-modal'); return false;">Más información</a></div>
+    <div class="cookie-text" data-es>Utilizamos cookies analíticas anónimas para mejorar su experiencia. No se utilizan cookies publicitarias. <a href="#" onclick="openModal('cookies-modal'); return false;">Más información</a></div>
   </div>
   <div class="cookie-btns">
     <button class="btn-cookie-accept" onclick="acceptCookies()">
-      <span data-fr>Accepter</span><span data-es style="display:none">Aceptar</span>
+      <span data-fr>Accepter</span><span data-es>Aceptar</span>
     </button>
     <button class="btn-cookie-decline" onclick="declineCookies()">
-      <span data-fr>Refuser les analytiques</span><span data-es style="display:none">Rechazar analíticas</span>
+      <span data-fr>Refuser les analytiques</span><span data-es>Rechazar analíticas</span>
     </button>
   </div>
 </div>
@@ -1609,7 +1651,7 @@ footer {
           <span class="logo-lab">LAB</span>
         </div>
         <p data-fr>Comparateur indépendant de solutions GED/DMS en Europe. Accompagnement B2B dans la transformation documentaire depuis 2025.</p>
-        <p data-es style="display:none">Comparador independiente de soluciones GED/DMS en Europa. Acompañamiento B2B en la transformación documental desde 2025.</p>
+        <p data-es>Comparador independiente de soluciones GED/DMS en Europa. Acompañamiento B2B en la transformación documental desde 2025.</p>
         <div class="footer-countries">
           <span class="country-flag">🇫🇷 France</span>
           <span class="country-flag">🇪🇸 España</span>
@@ -1622,29 +1664,29 @@ footer {
 
       <div class="footer-col">
         <h4 data-fr>Réforme 2026</h4>
-        <h4 data-es style="display:none">Reforma 2026</h4>
+        <h4 data-es>Reforma 2026</h4>
         <ul>
           <li>
             <span data-fr><a href="#" onclick="openEinvoicingModal(); return false;">E-invoicing France</a></span>
-            <span data-es style="display:none"><a href="#" onclick="openEinvoicingModal(); return false;">Facturación electrónica</a></span>
+            <span data-es><a href="#" onclick="openEinvoicingModal(); return false;">Facturación electrónica</a></span>
           </li>
           <li>
             <span data-fr><a href="https://www.impots.gouv.fr/portail/node/13464" target="_blank">Portail PPF</a></span>
-            <span data-es style="display:none"><a href="https://www.impots.gouv.fr/portail/node/13464" target="_blank">Portal PPF</a></span>
+            <span data-es><a href="https://www.facturae.gob.es/face/Paginas/Index.aspx" target="_blank">Portal FACe (España)</a></span>
           </li>
           <li>
             <span data-fr><a href="https://www.impots.gouv.fr/je-consulte-la-liste-des-plateformes-agreees" target="_blank">PDP Agréés</a></span>
-            <span data-es style="display:none"><a href="https://www.impots.gouv.fr/je-consulte-la-liste-des-plateformes-agreees" target="_blank">PDP Homologados</a></span>
+            <span data-es><a href="https://www.facturae.gob.es/face/Paginas/FACeB2B.aspx" target="_blank">ESF Homologados (España)</a></span>
           </li>
           <li>
             <span data-fr><a href="#" onclick="openGuideModal(); return false;">Guide conformité</a></span>
-            <span data-es style="display:none"><a href="#" onclick="openGuideModal(); return false;">Guía conformidad</a></span>
+            <span data-es><a href="#" onclick="openGuideModal(); return false;">Guía conformidad</a></span>
           </li>
         </ul>
       </div>
       <div class="footer-col">
         <h4 data-fr>Contact</h4>
-        <h4 data-es style="display:none">Contacto</h4>
+        <h4 data-es>Contacto</h4>
         <ul>
           <li><a href="mailto:info@documatch.eu">info@documatch.eu</a></li>
           <li><a href="https://www.documatch.eu" target="_blank">www.documatch.eu</a></li>
@@ -1657,22 +1699,22 @@ footer {
           </div>
           <div class="trust-badge" style="background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.1); color:rgba(255,255,255,0.5);">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" style="flex-shrink:0;"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-            SSL Sécurisé
+            <span data-fr>SSL Sécurisé</span><span data-es>SSL Seguro</span>
           </div>
         </div>
       </div>
     </div>
     <div class="footer-bottom">
       <div class="footer-legal">
-        <a href="#" onclick="openModal('mentions-modal'); return false;" data-fr>Mentions légales</a>
-        <a href="#" onclick="openModal('mentions-modal'); return false;" data-es style="display:none">Aviso legal</a>
-        <a href="#" onclick="openModal('rgpd-modal'); return false;" data-fr>Politique de confidentialité</a>
-        <a href="#" onclick="openModal('rgpd-modal'); return false;" data-es style="display:none">Política de privacidad</a>
+        <span data-fr><a href="#" onclick="openModal('mentions-modal'); return false;">Mentions légales</a></span>
+        <span data-es><a href="#" onclick="openModal('mentions-modal'); return false;">Aviso legal</a></span>
+        <span data-fr><a href="#" onclick="openModal('rgpd-modal'); return false;">Politique de confidentialité</a></span>
+        <span data-es><a href="#" onclick="openModal('rgpd-modal'); return false;">Política de privacidad</a></span>
         <a href="#" onclick="openModal('cgu-modal'); return false;">CGU</a>
-        <a href="#" onclick="openModal('cookies-modal'); return false;" data-fr>Cookies</a>
-        <a href="#" onclick="openModal('cookies-modal'); return false;" data-es style="display:none">Cookies</a>
-        <a href="mailto:info@documatch.eu" data-fr>Contact</a>
-        <a href="mailto:info@documatch.eu" data-es style="display:none">Contacto</a>
+        <span data-fr><a href="#" onclick="openModal('cookies-modal'); return false;">Cookies</a></span>
+        <span data-es><a href="#" onclick="openModal('cookies-modal'); return false;">Cookies</a></span>
+        <span data-fr><a href="mailto:info@documatch.eu">Contact</a></span>
+        <span data-es><a href="mailto:info@documatch.eu">Contacto</a></span>
       </div>
       <div class="footer-copy">© 2024–2026 Documatch.eu — All rights reserved</div>
     </div>
@@ -1688,28 +1730,16 @@ let currentLang = 'fr';
 
 function setLang(lang) {
   currentLang = lang;
-
-  // Batch all DOM updates in one frame to prevent mobile flicker
-  requestAnimationFrame(function() {
-    document.documentElement.lang = lang;
-
-    const frEls = document.querySelectorAll('[data-fr]');
-    const esEls = document.querySelectorAll('[data-es]');
-
-    if (lang === 'fr') {
-      frEls.forEach(el => { el.style.display = ''; });
-      esEls.forEach(el => { el.style.display = 'none'; });
-    } else {
-      frEls.forEach(el => { el.style.display = 'none'; });
-      esEls.forEach(el => { el.style.display = ''; });
-    }
-
-    document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-    // find clicked button
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      if (btn.textContent.trim().toLowerCase() === lang) btn.classList.add('active');
-    });
+  document.documentElement.lang = lang;
+  // Switch body class — CSS handles show/hide with no flash
+  document.body.classList.remove('lang-fr', 'lang-es');
+  document.body.classList.add('lang-' + lang);
+  // Update buttons
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.trim().toLowerCase() === lang);
   });
+  // Persist
+  try { localStorage.setItem('dm_lang', lang); } catch(e) {}
 }
 
 // ---- MODAL ----
@@ -1737,6 +1767,16 @@ function declineCookies() {
   document.getElementById('cookie-banner').style.display = 'none';
 }
 window.addEventListener('load', () => {
+  // Init language
+  const savedLang = (function(){ try { return localStorage.getItem('dm_lang'); } catch(e){ return null; } })();
+  const initLang = savedLang || 'fr';
+  currentLang = initLang;
+  document.documentElement.lang = initLang;
+  document.body.classList.add('lang-' + initLang);
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.trim().toLowerCase() === initLang);
+  });
+  // Cookies banner
   if (!localStorage.getItem('dm_cookies')) {
     setTimeout(() => {
       document.getElementById('cookie-banner').style.display = 'flex';
@@ -2274,91 +2314,152 @@ function restartQuiz() {
 </script>
 
 <!-- ========= GUIDE MODAL ========= -->
-<div id="guide-modal" onclick="if(event.target===this)closeGuideModal()" style="display:none; position:fixed; inset:0; z-index:5000; background:rgba(0,0,0,0.55); overflow-y:auto; padding:20px;">
-  <div style="max-width:1100px; margin:20px auto; background:#fff; border-radius:20px; overflow:hidden; position:relative; min-height:200px;">
+<div id="guide-modal" onclick="if(event.target===this)closeGuideModal()" style="display:none; position:fixed; inset:0; z-index:5000; background:rgba(0,0,0,0.55); overflow-y:auto; -webkit-overflow-scrolling:touch; padding:8px;">
+  <div style="max-width:1100px; margin:8px auto; background:#fff; border-radius:14px; overflow:hidden; position:relative; width:100%; box-sizing:border-box;">
 
     <style>
     /* GUIDE MODAL STYLES */
-    #guide-modal .deadline-band { background:#f59e0b; padding:14px 24px; text-align:center; font-size:14px; font-weight:600; color:#0d1f33; }
-    #guide-modal .hero-article { background:linear-gradient(135deg,#0d1f33 0%,#1e3a5f 100%); padding:48px 24px 36px; position:relative; overflow:hidden; }
+    #guide-modal .deadline-band { background:#f59e0b; padding:12px 16px; text-align:center; font-size:13px; font-weight:600; color:#0d1f33; }
+    #guide-modal .hero-article { background:linear-gradient(135deg,#0d1f33 0%,#1e3a5f 100%); padding:40px 24px 32px; position:relative; overflow:hidden; }
     #guide-modal .hero-article::before { content:''; position:absolute; inset:0; background-image:linear-gradient(rgba(37,99,235,0.06) 1px,transparent 1px),linear-gradient(90deg,rgba(37,99,235,0.06) 1px,transparent 1px); background-size:44px 44px; }
     #guide-modal .hero-article-inner { max-width:800px; margin:0 auto; position:relative; z-index:1; text-align:center; }
-    #guide-modal .article-tag { display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#fbbf24; background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.25); border-radius:20px; padding:5px 14px; margin-bottom:20px; }
-    #guide-modal .hero-article h1 { font-family:'DM Serif Display',Georgia,serif; font-size:clamp(1.6rem,3.5vw,2.4rem); color:white; line-height:1.2; margin-bottom:14px; }
-    #guide-modal .lead { font-size:1rem; color:rgba(255,255,255,0.7); max-width:680px; line-height:1.7; margin-bottom:22px; margin-left:auto; margin-right:auto; }
-    #guide-modal .article-meta { display:flex; gap:16px; flex-wrap:wrap; font-size:12px; color:rgba(255,255,255,0.4); justify-content:center; }
-    #guide-modal .article-wrap { max-width:1100px; margin:0 auto; padding:48px 24px; display:grid; grid-template-columns:1fr 280px; gap:48px; align-items:start; }
-    #guide-modal .article-body h2 { font-family:'DM Serif Display',Georgia,serif; font-size:1.5rem; color:#1e3a5f; margin:36px 0 12px; padding-bottom:10px; border-bottom:2px solid #eff6ff; }
+    #guide-modal .article-tag { display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#fbbf24; background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.25); border-radius:20px; padding:5px 14px; margin-bottom:16px; }
+    #guide-modal .hero-article h1 { font-family:Georgia,serif; font-size:clamp(1.3rem,3vw,2.2rem); color:white; line-height:1.25; margin-bottom:12px; }
+    #guide-modal .lead { font-size:0.95rem; color:rgba(255,255,255,0.7); max-width:680px; line-height:1.7; margin-bottom:18px; margin-left:auto; margin-right:auto; }
+    #guide-modal .article-meta { display:flex; gap:12px; flex-wrap:wrap; font-size:11px; color:rgba(255,255,255,0.4); justify-content:center; }
+    /* LAYOUT */
+    #guide-modal .article-wrap { max-width:1100px; margin:0 auto; padding:32px 24px; display:grid; grid-template-columns:1fr 260px; gap:32px; align-items:start; width:100%; box-sizing:border-box; }
+    /* ARTICLE BODY */
+    #guide-modal .article-body h2 { font-family:Georgia,serif; font-size:1.35rem; color:#1e3a5f; margin:28px 0 10px; padding-bottom:8px; border-bottom:2px solid #eff6ff; }
     #guide-modal .article-body h2:first-child { margin-top:0; }
-    #guide-modal .article-body h3 { font-size:1rem; font-weight:600; color:#1e3a5f; margin:20px 0 8px; }
-    #guide-modal .article-body p { font-size:0.9rem; color:#475569; margin-bottom:14px; line-height:1.75; }
-    #guide-modal .article-body ul { list-style:none; margin-bottom:14px; }
-    #guide-modal .article-body ul li { display:flex; align-items:flex-start; gap:10px; font-size:0.9rem; color:#475569; margin-bottom:9px; line-height:1.6; }
+    #guide-modal .article-body h3 { font-size:0.95rem; font-weight:600; color:#1e3a5f; margin:18px 0 8px; }
+    #guide-modal .article-body p { font-size:0.88rem; color:#475569; margin-bottom:12px; line-height:1.75; }
+    #guide-modal .article-body ul { list-style:none; margin-bottom:12px; padding:0; }
+    #guide-modal .article-body ul li { display:flex; align-items:flex-start; gap:8px; font-size:0.88rem; color:#475569; margin-bottom:8px; line-height:1.6; }
     #guide-modal .article-body ul li::before { content:'→'; color:#2563eb; font-weight:700; flex-shrink:0; margin-top:1px; }
-    #guide-modal .info-box { border-radius:10px; padding:18px 20px; margin:20px 0; border-left:4px solid; }
+    /* INFO BOXES */
+    #guide-modal .info-box { border-radius:8px; padding:16px 18px; margin:16px 0; border-left:4px solid; }
     #guide-modal .info-box.blue { background:#eff6ff; border-color:#2563eb; }
     #guide-modal .info-box.amber { background:#fffbeb; border-color:#f59e0b; }
     #guide-modal .info-box.green { background:#ecfdf5; border-color:#10b981; }
     #guide-modal .info-box.red { background:#fef2f2; border-color:#ef4444; }
-    #guide-modal .info-box-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:7px; }
+    #guide-modal .info-box-title { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px; }
     #guide-modal .info-box.blue .info-box-title { color:#2563eb; }
     #guide-modal .info-box.amber .info-box-title { color:#b45309; }
     #guide-modal .info-box.green .info-box-title { color:#047857; }
     #guide-modal .info-box.red .info-box-title { color:#ef4444; }
-    #guide-modal .info-box p { font-size:0.88rem; color:#334155; margin:0; line-height:1.65; }
-    #guide-modal .timeline { margin:20px 0; }
-    #guide-modal .tl-item { display:flex; gap:14px; padding-bottom:20px; position:relative; }
-    #guide-modal .tl-item:not(:last-child)::before { content:''; position:absolute; left:18px; top:38px; bottom:0; width:2px; background:#e2e8f0; }
-    #guide-modal .tl-dot { width:36px; height:36px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; }
+    #guide-modal .info-box p { font-size:0.85rem; color:#334155; margin:0; line-height:1.65; }
+    /* TIMELINE */
+    #guide-modal .timeline { margin:16px 0; }
+    #guide-modal .tl-item { display:flex; gap:12px; padding-bottom:18px; position:relative; }
+    #guide-modal .tl-item:not(:last-child)::before { content:''; position:absolute; left:17px; top:36px; bottom:0; width:2px; background:#e2e8f0; }
+    #guide-modal .tl-dot { width:34px; height:34px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; }
     #guide-modal .tl-dot.done { background:#10b981; color:white; }
     #guide-modal .tl-dot.now { background:#f59e0b; color:white; }
     #guide-modal .tl-dot.soon { background:#2563eb; color:white; }
-    #guide-modal .tl-dot.future { background:#e2e8f0; color:#64748b; }
-    #guide-modal .tl-content h4 { font-size:0.9rem; font-weight:600; color:#1e3a5f; margin-bottom:3px; }
-    #guide-modal .tl-content p { font-size:0.82rem; color:#64748b; margin:0; line-height:1.5; }
+    #guide-modal .tl-content h4 { font-size:0.88rem; font-weight:600; color:#1e3a5f; margin-bottom:3px; }
+    #guide-modal .tl-content p { font-size:0.8rem; color:#64748b; margin:0; line-height:1.5; }
     #guide-modal .tl-date { font-size:10px; font-weight:700; color:#2563eb; text-transform:uppercase; letter-spacing:0.06em; }
-    #guide-modal .table-wrap { overflow-x:auto; margin:16px 0; }
-    #guide-modal table { width:100%; border-collapse:collapse; font-size:0.85rem; }
-    #guide-modal th { background:#1e3a5f; color:white; font-weight:600; padding:10px 14px; text-align:left; font-size:11px; letter-spacing:0.04em; }
-    #guide-modal td { padding:10px 14px; border-bottom:1px solid #f1f5f9; color:#475569; }
+    /* TABLES */
+    #guide-modal .table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; margin:14px 0; }
+    #guide-modal table { width:100%; border-collapse:collapse; font-size:0.82rem; min-width:400px; }
+    #guide-modal th { background:#1e3a5f; color:white; font-weight:600; padding:9px 12px; text-align:left; font-size:11px; }
+    #guide-modal td { padding:9px 12px; border-bottom:1px solid #f1f5f9; color:#475569; }
     #guide-modal tr:hover td { background:#eff6ff; }
-    #guide-modal .badge { display:inline-block; font-size:10px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; border-radius:4px; padding:2px 7px; }
+    #guide-modal .badge { display:inline-block; font-size:9px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; border-radius:4px; padding:2px 6px; }
     #guide-modal .badge.obl { background:#fef2f2; color:#ef4444; }
     #guide-modal .badge.rec { background:#ecfdf5; color:#047857; }
     #guide-modal .badge.opt { background:#f1f5f9; color:#64748b; }
+    /* SIDEBAR */
     #guide-modal .sidebar { position:sticky; top:20px; }
-    #guide-modal .sidebar-card { background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:12px; padding:20px; margin-bottom:16px; }
-    #guide-modal .sidebar-card h4 { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#64748b; margin-bottom:12px; }
-    #guide-modal .sidebar-card ul { list-style:none; }
-    #guide-modal .sidebar-card li { margin-bottom:9px; }
-    #guide-modal .sidebar-card a { font-size:12px; color:#2563eb; text-decoration:none; display:flex; align-items:center; gap:5px; line-height:1.4; }
+    #guide-modal .sidebar-card { background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:10px; padding:16px; margin-bottom:14px; }
+    #guide-modal .sidebar-card h4 { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#64748b; margin-bottom:10px; }
+    #guide-modal .sidebar-card ul { list-style:none; padding:0; }
+    #guide-modal .sidebar-card li { margin-bottom:8px; }
+    #guide-modal .sidebar-card a { font-size:12px; color:#2563eb; text-decoration:none; display:flex; align-items:center; gap:4px; line-height:1.4; }
     #guide-modal .sidebar-card a:hover { text-decoration:underline; }
-    #guide-modal .sidebar-cta { background:#1e3a5f; border-radius:12px; padding:20px; text-align:center; }
-    #guide-modal .sidebar-cta h4 { font-size:0.95rem; font-weight:700; color:white; margin-bottom:7px; }
-    #guide-modal .sidebar-cta p { font-size:0.82rem; color:rgba(255,255,255,0.6); margin-bottom:14px; line-height:1.5; }
-    #guide-modal .btn-sidebar { display:block; font-size:13px; font-weight:700; color:white; background:#2563eb; border:none; border-radius:7px; padding:10px 14px; cursor:pointer; text-decoration:none; transition:background 0.2s; text-align:center; }
-    #guide-modal .btn-sidebar:hover { background:#3b82f6; }
-    @media(max-width:768px) {
-      #guide-modal .article-wrap { grid-template-columns:1fr; }
-      #guide-modal .sidebar { position:static; }
+    #guide-modal .sidebar-cta { background:#1e3a5f; border-radius:10px; padding:18px; text-align:center; }
+    #guide-modal .sidebar-cta h4 { font-size:0.9rem; font-weight:700; color:white; margin-bottom:6px; }
+    #guide-modal .sidebar-cta p { font-size:0.8rem; color:rgba(255,255,255,0.6); margin-bottom:12px; line-height:1.5; }
+    #guide-modal .btn-sidebar { display:block; font-size:13px; font-weight:700; color:white; background:#2563eb; border:none; border-radius:6px; padding:10px; cursor:pointer; text-decoration:none; text-align:center; }
+    /* ===== RESPONSIVE ===== */
+    @media(max-width:900px) {
+      #guide-modal .article-wrap { grid-template-columns:1fr !important; padding:20px 14px; gap:0; }
+      #guide-modal .sidebar { position:static !important; margin-top:20px; width:100%; }
+      #guide-modal .sidebar-card { margin-bottom:10px; }
+      #guide-modal .sidebar-cta { border-radius:10px; margin-bottom:12px; }
+      #guide-modal table { font-size:0.78rem; }
+      #guide-modal th, #guide-modal td { padding:7px 8px; }
+    }
+    @media(max-width:600px) {
+      #guide-modal .hero-article { padding:20px 12px 16px; }
+      #guide-modal .hero-article h1 { font-size:1.1rem; line-height:1.3; }
+      #guide-modal .lead { font-size:0.82rem; margin-bottom:12px; }
+      #guide-modal .article-meta { font-size:10px; gap:8px; }
+      #guide-modal .article-wrap { padding:14px 10px !important; }
+      #guide-modal .article-body h2 { font-size:0.95rem; padding-bottom:5px; margin:16px 0 7px; }
+      #guide-modal .article-body h3 { font-size:0.85rem; margin:12px 0 6px; }
+      #guide-modal .article-body p, #guide-modal .article-body ul li { font-size:0.8rem; line-height:1.6; }
+      #guide-modal .article-body ul li { gap:6px; }
+      #guide-modal .info-box { padding:10px 11px; margin:12px 0; }
+      #guide-modal .info-box p { font-size:0.78rem; }
+      #guide-modal .info-box-title { font-size:9px; }
+      #guide-modal .tl-item { gap:8px; padding-bottom:14px; }
+      #guide-modal .tl-dot { width:26px; height:26px; font-size:9px; flex-shrink:0; }
+      #guide-modal .tl-item:not(:last-child)::before { left:12px; top:30px; }
+      #guide-modal .tl-content h4 { font-size:0.8rem; }
+      #guide-modal .tl-content p { font-size:0.74rem; }
+      #guide-modal .tl-date { font-size:9px; }
+      #guide-modal .table-wrap { margin:10px -2px; }
+      #guide-modal table { font-size:0.72rem; min-width:300px; }
+      #guide-modal th { padding:6px 7px; font-size:10px; }
+      #guide-modal td { padding:6px 7px; }
+      #guide-modal .badge { font-size:8px; padding:1px 5px; }
+      #guide-modal .deadline-band { font-size:11px; padding:8px 10px; }
+      #guide-modal .sidebar { padding:0 2px; }
+      #guide-modal .sidebar-card { padding:12px; }
+      #guide-modal .sidebar-card h4 { font-size:10px; margin-bottom:8px; }
+      #guide-modal .sidebar-card a { font-size:11px; }
+      #guide-modal .sidebar-cta { padding:14px; }
+      #guide-modal .sidebar-cta h4 { font-size:0.82rem; }
+      #guide-modal .sidebar-cta p { font-size:0.74rem; margin-bottom:10px; }
+      #guide-modal .btn-sidebar { font-size:12px; padding:9px; }
+      #guide-modal [data-fr], #guide-modal [data-es] { display:block !important; }
     }
     </style>
-    <div class="deadline-band">⚡ À partir du <strong>1er septembre 2026</strong> — Facturation électronique B2B obligatoire en France pour toutes les entreprises</div>
-    <section class="hero-article">
-  <div class="hero-article-inner">
-    <div class="article-tag">
-      📋 Guide expert Documatch
-    </div>
-    <h1>Guide complet : Conformité GED &amp; Facturation Électronique 2026</h1>
-    <p class="lead">Tout ce que vous devez savoir pour préparer votre entreprise aux nouvelles obligations documentaires françaises avant le 1er septembre 2026 — en langage clair, sans jargon.</p>
-    <div class="article-meta">
-      <span>📅 Mis à jour : juin 2026</span>
-      <span>⏱ Lecture : 8 minutes</span>
-      <span>✍️ Documatch.eu — Expert GED indépendant</span>
-    </div>
-  </div>
-</section>
+    <!-- DEADLINE BAND -->
+    <div class="deadline-band" data-fr>⚡ À partir du <strong>1er septembre 2026</strong> — Facturation électronique B2B obligatoire en France pour toutes les entreprises</div>
+    <div class="deadline-band" data-es>⚡ A partir del <strong>1 de septiembre de 2026</strong> — Facturación electrónica B2B obligatoria en Francia para todas las empresas</div>
 
+    <!-- HERO FR -->
+    <section class="hero-article" data-fr>
+      <div class="hero-article-inner">
+        <div class="article-tag">📋 Guide expert Documatch</div>
+        <h1>Guide complet : Conformité GED &amp; Facturation Électronique 2026</h1>
+        <p class="lead">Tout ce que vous devez savoir pour préparer votre entreprise aux nouvelles obligations documentaires françaises avant le 1er septembre 2026 — en langage clair, sans jargon.</p>
+        <div class="article-meta">
+          <span>📅 Mis à jour : juin 2026</span>
+          <span>⏱ Lecture : 8 minutes</span>
+          <span>✍️ Documatch.eu — Expert GED indépendant</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- HERO ES -->
+    <section class="hero-article" data-es>
+      <div class="hero-article-inner">
+        <div class="article-tag">📋 Guía experta Documatch</div>
+        <h1>Guía completa : Conformidad GED &amp; Facturación Electrónica 2026</h1>
+        <p class="lead">Todo lo que necesita saber para preparar su empresa para las nuevas obligaciones documentales españolas y europeas antes del 1 de septiembre de 2026 — en lenguaje claro, sin tecnicismos.</p>
+        <div class="article-meta">
+          <span>📅 Actualizado : junio 2026</span>
+          <span>⏱ Lectura : 8 minutos</span>
+          <span>✍️ Documatch.eu — Experto GED independiente</span>
+        </div>
+      </div>
+    </section>
+
+<div data-fr>
 <div class="article-wrap">
   <article class="article-body">
 
@@ -2539,7 +2640,199 @@ function restartQuiz() {
     </div>
   </aside>
 </div>
-  </div>
+  
+</div>
+<div data-es>
+<div class="article-wrap">
+  <article class="article-body">
+
+    <h2 id="section-reforme-es">1. ¿Qué es la reforma de la facturación electrónica en España?</h2>
+    <p>España generaliza la <strong>facturación electrónica B2B</strong> mediante la <strong>Ley 18/2022 de Creación y Crecimiento de Empresas (Ley Crea y Crece)</strong>. Esta reforma se inscribe en el movimiento europeo de desmaterialización fiscal y tiene como objetivo modernizar las relaciones comerciales, reducir la morosidad y combatir el fraude fiscal.</p>
+
+    <div class="info-box blue">
+      <div class="info-box-title">📌 Lo que dice la ley</div>
+      <p>La <strong>Ley Crea y Crece</strong> obliga a todas las empresas y autónomos españoles a emitir y recibir facturas electrónicas en sus relaciones B2B. La obligación se aplica de forma escalonada según el volumen de facturación, usando el formato <strong>Factura-e (FacturaE 3.2.x)</strong> compatible con los sistemas de la AEAT.</p>
+    </div>
+
+    <h3>¿Quién está afectado?</h3>
+    <ul>
+      <li>Todas las empresas españolas con relaciones comerciales B2B</li>
+      <li>Autónomos con actividad empresarial sujeta a IVA</li>
+      <li>Filiales españolas de grupos extranjeros</li>
+      <li>Sociedades y asociaciones con actividad económica</li>
+    </ul>
+
+    <h2 id="section-calendrier-es">2. El calendario de despliegue en España</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot done">✓</div>
+        <div class="tl-content">
+          <div class="tl-date">En vigor — Sector público</div>
+          <h4>FACe obligatorio para facturas a la Administración Pública</h4>
+          <p>Todas las facturas dirigidas a organismos públicos ya deben emitirse en formato electrónico a través de FACe.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot now">!</div>
+        <div class="tl-content">
+          <div class="tl-date">Desde julio 2025 — OBLIGATORIO</div>
+          <h4>Grandes empresas con facturación superior a 8 millones €</h4>
+          <p>Obligación de <strong>emitir y recibir</strong> facturas electrónicas B2B mediante plataformas homologadas (ESF) o FACeB2B.</p>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot soon">→</div>
+        <div class="tl-content">
+          <div class="tl-date">Desde enero 2026 — OBLIGATORIO</div>
+          <h4>Resto de empresas y autónomos</h4>
+          <p>Todas las empresas y autónomos deberán emitir y recibir facturas electrónicas B2B en formato FacturaE 3.2.x.</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 id="section-formats-es">3. Los formatos de facturas electrónicas aceptados en España</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Formato</th><th>Tipo</th><th>Compatibilidad ERP</th><th>Estado España</th></tr></thead>
+        <tbody>
+          <tr><td><strong>FacturaE 3.2.x (XML)</strong></td><td>XML estructurado firmado</td><td>Excelente</td><td><span class="badge obl">Obligatorio</span></td></tr>
+          <tr><td><strong>UBL 2.1</strong></td><td>XML estructurado</td><td>Muy buena</td><td><span class="badge rec">Compatible</span></td></tr>
+          <tr><td><strong>Factur-X</strong></td><td>PDF + XML embebido</td><td>Buena</td><td><span class="badge rec">Compatible</span></td></tr>
+          <tr><td>PDF simple</td><td>Imagen no estructurada</td><td>N/A</td><td><span class="badge opt">No válido B2B</span></td></tr>
+          <tr><td>Factura en papel</td><td>Documento físico</td><td>N/A</td><td><span class="badge opt">No válido B2B</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="section-ppf-pdp-es">4. FACe / FACeB2B vs ESF: ¿cuál es la diferencia?</h2>
+    <div class="info-box amber">
+      <div class="info-box-title">⚠️ Punto clave a entender</div>
+      <p>En España coexisten dos vías para cumplir con la Ley Crea y Crece. La elección impacta directamente en su GED y en su ERP.</p>
+    </div>
+    <h3>FACe / FACeB2B (Plataforma pública)</h3>
+    <ul>
+      <li>Solución gratuita del Estado gestionada por el Ministerio de Hacienda</li>
+      <li>FACe: facturas a la Administración Pública (B2G)</li>
+      <li>FACeB2B: intercambio de facturas entre empresas (B2B)</li>
+      <li>Adecuado para PYMES con bajo volumen de facturación</li>
+      <li>Sin integración ERP nativa avanzada — tratamiento semi-manual</li>
+    </ul>
+    <h3>ESF — Empresas de Servicios de Facturación (Plataformas privadas)</h3>
+    <ul>
+      <li>Operadores privados interoperables homologados por la AEAT</li>
+      <li>Funcionalidades avanzadas: LAD/RAD, workflows, integración ERP, archivo legal</li>
+      <li>Recomendadas para grandes empresas y ETI con alto volumen</li>
+      <li>Conectadas a su GED y a su ERP existente via API</li>
+      <li>Ejemplos: DocuWare, Zeendoc, NeoLedge y otros editores referenciados en Documatch</li>
+    </ul>
+
+    <div class="info-box blue" style="margin-bottom:0;">
+      <div class="info-box-title">🇪🇸 Equivalentes en España — Ley Crea y Crece</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Concepto</th><th>Equivalente español</th></tr></thead>
+          <tbody>
+            <tr><td>Solución Pública B2B</td><td><a href="https://www.agenciatributaria.es/AEAT.internet/Inicio/Ayuda/Manuales__Folletos_y_Videos/Folletos__Informativos/Facturacion_Electronica/Proyecto_de_Solucion_Publica_de_Facturacion_Electronica_B2B__Ley_Crea_y_Crece_/Proyecto_de_Solucion_Publica_de_Facturacion_Electronica_B2B__Ley_Crea_y_Crece_.shtml" target="_blank" style="color:#2563eb;">AEAT — Ley Crea y Crece</a></td></tr>
+            <tr><td>Plataformas privadas interoperables</td><td><a href="https://www.facturae.gob.es/face/Paginas/FACeB2B.aspx" target="_blank" style="color:#2563eb;">FACeB2B</a></td></tr>
+            <tr><td>Directorio de receptores</td><td><a href="https://www.facturae.gob.es/dire/Paginas/Index.aspx" target="_blank" style="color:#2563eb;">DIRe — Directorio Común</a></td></tr>
+            <tr><td>Operadores privados (ESF)</td><td><a href="https://www.facturae.gob.es/es/Paginas/Index.aspx" target="_blank" style="color:#2563eb;">Listado oficial ESF</a></td></tr>
+            <tr><td>Portal público AP (equiv. Chorus Pro)</td><td><a href="https://www.facturae.gob.es/face/Paginas/Index.aspx" target="_blank" style="color:#2563eb;">FACe — Punto General de Entrada</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <h2 id="section-ged-es">5. Lo que su GED debe ser capaz de hacer en 2026</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Funcionalidad</th><th>Obligación</th><th>Fecha límite</th></tr></thead>
+        <tbody>
+          <tr><td>Recepción de facturas electrónicas (Factur-X, UBL)</td><td><span class="badge obl">Obligatorio</span></td><td>Sept. 2026</td></tr>
+          <tr><td>Archivo con valor probatorio (NF Z42-020)</td><td><span class="badge obl">Obligatorio</span></td><td>Inmediato</td></tr>
+          <tr><td>Conservación 10 años de facturas</td><td><span class="badge obl">Obligatorio</span></td><td>Inmediato</td></tr>
+          <tr><td>Trazabilidad de accesos y modificaciones (RGPD)</td><td><span class="badge obl">Obligatorio</span></td><td>Inmediato</td></tr>
+          <tr><td>Emisión de facturas electrónicas estructuradas</td><td><span class="badge obl">Obligatorio</span></td><td>Sept. 2027</td></tr>
+          <tr><td>Integración ERP bidireccional</td><td><span class="badge rec">Recomendado</span></td><td>Cuanto antes</td></tr>
+          <tr><td>Firma electrónica eIDAS</td><td><span class="badge rec">Recomendado</span></td><td>Según sector</td></tr>
+          <tr><td>Workflows de validación automatizados</td><td><span class="badge opt">Opcional</span></td><td>Según volumen</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="section-risques-es">6. Los riesgos en caso de incumplimiento</h2>
+    <div class="info-box red">
+      <div class="info-box-title">🚨 Sanciones aplicables</div>
+      <p>El incumplimiento de las obligaciones de facturación electrónica expone a la empresa a <strong>multas de hasta 15 euros por factura</strong> no conforme, con un límite de 15.000 euros anuales. Las infracciones del RGPD pueden acarrear sanciones de hasta el <strong>4% de la facturación mundial</strong>.</p>
+    </div>
+    <ul>
+      <li>Imposibilidad de recibir facturas de proveedores tras el 1 sept. 2026</li>
+      <li>Bloqueo de los procesos contables y de la cadena de suministro</li>
+      <li>Multas fiscales por incumplimiento de la normativa del IVA</li>
+      <li>Riesgo de inspección fiscal en caso de archivo no conforme</li>
+      <li>Pérdida de credibilidad ante los socios comerciales</li>
+    </ul>
+
+    <h2 id="section-plan-es">7. ¿Por dónde empezar? Los 5 pasos clave</h2>
+    <div class="info-box green">
+      <div class="info-box-title">✅ Plan de acción recomendado por Documatch</div>
+      <p>Siga estos 5 pasos en orden para estructurar su proyecto de conformidad documental antes de septiembre de 2026.</p>
+    </div>
+    <ul>
+      <li><strong>Paso 1 — Auditoría de lo existente:</strong> cartografíe sus flujos de facturas (volúmenes, formatos, canales) e identifique las carencias de su sistema actual.</li>
+      <li><strong>Paso 2 — Elección PPF o PDP:</strong> evalúe su volumen documental, su ERP y su necesidad de automatización para elegir la vía adecuada.</li>
+      <li><strong>Paso 3 — Selección GED/DMS:</strong> compare las soluciones compatibles con su ERP en Documatch.eu entre más de 200 herramientas referenciadas.</li>
+      <li><strong>Paso 4 — Despliegue e integración:</strong> planifique 3 a 6 meses para el despliegue, la formación y las pruebas de integración ERP.</li>
+      <li><strong>Paso 5 — Formación y gestión del cambio:</strong> involucre a los equipos contables, administrativos e IT desde el inicio del proyecto.</li>
+    </ul>
+
+    <div class="info-box blue" style="margin-top:32px;">
+      <div class="info-box-title">🔍 Evalúe su nivel de preparación</div>
+      <p>Realice el diagnóstico Documatch Lab en 5 minutos para obtener su puntuación de madurez documental personalizada y las recomendaciones de soluciones adaptadas a su perfil.</p>
+      <a href="#" onclick="closeGuideModal(); setTimeout(function(){ document.querySelector('.btn-hero').scrollIntoView({behavior:'smooth'}); }, 300); return false;" style="display:inline-block; margin-top:12px; background:#2563eb; color:white; font-weight:700; font-size:13px; padding:9px 18px; border-radius:7px; text-decoration:none;">→ Iniciar el diagnóstico gratuito</a>
+    </div>
+
+  </article>
+
+  <aside class="sidebar">
+    <div class="sidebar-card">
+      <h4>📑 Índice</h4>
+      <ul>
+        <li><a href="#" onclick="document.getElementById('section-reforme-es').scrollIntoView({behavior:'smooth', block:'start'}); return false;">1. La reforma 2026</a></li>
+        <li><a href="#" onclick="document.getElementById('section-calendrier-es').scrollIntoView({behavior:'smooth', block:'start'}); return false;">2. Calendario</a></li>
+        <li><a href="#" onclick="document.getElementById('section-formats-es').scrollIntoView({behavior:'smooth', block:'start'}); return false;">3. Formatos aceptados</a></li>
+        <li><a href="#" onclick="document.getElementById('section-ppf-pdp-es').scrollIntoView({behavior:'smooth', block:'start'}); return false;">4. PPF vs PDP</a></li>
+        <li><a href="#" onclick="document.getElementById('section-ged-es').scrollIntoView({behavior:'smooth', block:'start'}); return false;">5. Funcionalidades GED requeridas</a></li>
+        <li><a href="#" onclick="document.getElementById('section-risques-es').scrollIntoView({behavior:'smooth', block:'start'}); return false;">6. Riesgos</a></li>
+        <li><a href="#" onclick="document.getElementById('section-plan-es').scrollIntoView({behavior:'smooth', block:'start'}); return false;">7. Plan de acción</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-card">
+      <h4>🇫🇷 Francia — Fuentes oficiales</h4>
+      <ul>
+        <li><a href="https://www.impots.gouv.fr/portail/node/13464" target="_blank" rel="noopener">↗ Portal PPF — impots.gouv.fr</a></li>
+        <li><a href="https://www.impots.gouv.fr/je-consulte-la-liste-des-plateformes-agreees" target="_blank" rel="noopener">↗ Lista PDP homologados DGFiP</a></li>
+        <li><a href="https://www.cnil.fr" target="_blank" rel="noopener">↗ CNIL — Conformidad RGPD</a></li>
+        <li><a href="https://www.afnor.org" target="_blank" rel="noopener">↗ AFNOR — Norma NF Z42-020</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-card">
+      <h4>🇪🇸 España — Fuentes oficiales</h4>
+      <ul>
+        <li><a href="https://www.agenciatributaria.es/AEAT.internet/Inicio/Ayuda/Manuales__Folletos_y_Videos/Folletos__Informativos/Facturacion_Electronica/Proyecto_de_Solucion_Publica_de_Facturacion_Electronica_B2B__Ley_Crea_y_Crece_/Proyecto_de_Solucion_Publica_de_Facturacion_Electronica_B2B__Ley_Crea_y_Crece_.shtml" target="_blank" rel="noopener">↗ AEAT — Solución Pública B2B (Ley Crea y Crece)</a></li>
+        <li><a href="https://www.facturae.gob.es/face/Paginas/FACeB2B.aspx" target="_blank" rel="noopener">↗ FACeB2B — Plataformas privadas</a></li>
+        <li><a href="https://www.facturae.gob.es/dire/Paginas/Index.aspx" target="_blank" rel="noopener">↗ DIRe — Directorio de receptores</a></li>
+        <li><a href="https://www.facturae.gob.es/es/Paginas/Index.aspx" target="_blank" rel="noopener">↗ FACe — Portal público AP</a></li>
+        <li><a href="https://www.aepd.es" target="_blank" rel="noopener">↗ AEPD — Protección de datos</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-cta">
+      <h4>¿Cuál es su puntuación de conformidad?</h4>
+      <p>Diagnóstico gratuito en 5 minutos — resultados personalizados instantáneos.</p>
+      <a href="#" onclick="closeGuideModal(); setTimeout(function(){ document.querySelector('.btn-hero').scrollIntoView({behavior:'smooth'}); document.querySelector('.btn-hero').focus(); }, 300); return false;" class="btn-sidebar">Iniciar el diagnóstico →</a>
+    </div>
+  </aside>
+</div>
+</div></div>
 </div>
 
 <script>
@@ -2554,48 +2847,139 @@ function closeGuideModal() {
 </script>
 
 <!-- ========= E-INVOICING INFO MODAL ========= -->
-<div id="einvoicing-modal" onclick="if(event.target===this)closeEinvoicingModal()" style="display:none; position:fixed; inset:0; z-index:6000; background:rgba(0,0,0,0.6); overflow-y:auto; padding:20px; align-items:center; justify-content:center;">
-  <div style="max-width:680px; margin:40px auto; background:#fff; border-radius:20px; overflow:hidden;">
-    <!-- Header -->
-    <div style="background:linear-gradient(135deg,#0d1f33,#1e3a5f); padding:36px 36px 28px; text-align:center;">
-      <div style="display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#fbbf24; background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.25); border-radius:20px; padding:5px 14px; margin-bottom:16px;">⚡ Réforme officielle 2026</div>
-      <h2 style="font-family:Georgia,serif; font-size:1.7rem; color:white; line-height:1.25; margin-bottom:12px;">Facturation électronique B2B<br>obligatoire au 1er septembre 2026</h2>
-      <p style="font-size:0.9rem; color:rgba(255,255,255,0.65); line-height:1.65; max-width:520px; margin:0 auto;">La DGFiP (Direction Générale des Finances Publiques) impose la généralisation de la facturation électronique entre entreprises assujetties à la TVA en France.</p>
+<style>
+#einvoicing-modal .ei-inner { max-width:680px; margin:20px auto; background:#fff; border-radius:20px; overflow:hidden; }
+#einvoicing-modal .ei-header { background:linear-gradient(135deg,#0d1f33,#1e3a5f); padding:32px 28px 24px; text-align:center; }
+#einvoicing-modal .ei-tag { display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#fbbf24; background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.25); border-radius:20px; padding:5px 14px; margin-bottom:14px; }
+#einvoicing-modal .ei-header h2 { font-family:Georgia,serif; font-size:clamp(1.3rem,4vw,1.7rem); color:white; line-height:1.25; margin-bottom:10px; }
+#einvoicing-modal .ei-header p { font-size:0.88rem; color:rgba(255,255,255,0.65); line-height:1.65; max-width:500px; margin:0 auto; }
+#einvoicing-modal .ei-body { padding:24px 28px; }
+#einvoicing-modal .ei-alert { background:#fffbeb; border-left:4px solid #f59e0b; border-radius:8px; padding:14px 16px; margin-bottom:20px; }
+#einvoicing-modal .ei-alert-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#b45309; margin-bottom:8px; }
+#einvoicing-modal .ei-alert ul { list-style:none; padding:0; margin:0; }
+#einvoicing-modal .ei-alert li { display:flex; gap:8px; font-size:0.86rem; color:#334155; margin-bottom:7px; align-items:flex-start; line-height:1.5; }
+#einvoicing-modal .ei-alert li span.arr { color:#f59e0b; font-weight:700; flex-shrink:0; }
+#einvoicing-modal .ei-voies h4 { font-size:0.88rem; font-weight:700; color:#1e3a5f; margin-bottom:10px; }
+#einvoicing-modal .ei-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px; }
+#einvoicing-modal .ei-box { border-radius:10px; padding:12px 14px; }
+#einvoicing-modal .ei-box-gray { background:#f8fafc; border:1.5px solid #e2e8f0; }
+#einvoicing-modal .ei-box-blue { background:#eff6ff; border:1.5px solid #2563eb; }
+#einvoicing-modal .ei-box-title { font-size:12px; font-weight:700; color:#1e3a5f; margin-bottom:5px; }
+#einvoicing-modal .ei-box-desc { font-size:11.5px; color:#64748b; line-height:1.5; }
+#einvoicing-modal .ei-sources h4 { font-size:0.88rem; font-weight:700; color:#1e3a5f; margin-bottom:8px; }
+#einvoicing-modal .ei-sources ul { list-style:none; padding:0; margin:0 0 20px; }
+#einvoicing-modal .ei-sources li { margin-bottom:7px; }
+#einvoicing-modal .ei-sources a { font-size:13px; color:#2563eb; text-decoration:none; display:flex; align-items:center; gap:6px; }
+#einvoicing-modal .ei-sources a:hover { text-decoration:underline; }
+#einvoicing-modal .ei-btns { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; padding-top:14px; border-top:1px solid #f1f5f9; }
+#einvoicing-modal .ei-btn-prim { display:inline-flex; align-items:center; gap:7px; font-size:14px; font-weight:700; color:white; background:#2563eb; border-radius:8px; padding:11px 18px; text-decoration:none; }
+#einvoicing-modal .ei-btn-sec { display:inline-flex; align-items:center; gap:7px; font-size:13px; font-weight:600; color:#475569; background:#f1f5f9; border-radius:8px; padding:11px 16px; text-decoration:none; }
+@media(max-width:480px) {
+  #einvoicing-modal .ei-inner { margin:10px; border-radius:14px; }
+  #einvoicing-modal .ei-header { padding:20px 14px 16px; }
+  #einvoicing-modal .ei-header h2 { font-size:1.1rem; line-height:1.3; }
+  #einvoicing-modal .ei-tag { font-size:10px; padding:4px 10px; }
+  #einvoicing-modal .ei-header p { font-size:0.8rem; }
+  #einvoicing-modal .ei-body { padding:16px 14px; }
+  #einvoicing-modal .ei-alert { padding:12px 12px; }
+  #einvoicing-modal .ei-alert-title { font-size:10px; }
+  #einvoicing-modal .ei-alert li { font-size:0.8rem; }
+  #einvoicing-modal .ei-grid { grid-template-columns:1fr; gap:8px; }
+  #einvoicing-modal .ei-box { padding:10px 12px; }
+  #einvoicing-modal .ei-box-title { font-size:11px; }
+  #einvoicing-modal .ei-box-desc { font-size:11px; }
+  #einvoicing-modal .ei-sources h4 { font-size:0.82rem; }
+  #einvoicing-modal .ei-sources a { font-size:12px; }
+  #einvoicing-modal .ei-btn-prim, #einvoicing-modal .ei-btn-sec { width:100%; justify-content:center; font-size:13px; padding:10px 12px; }
+  #einvoicing-modal .ei-btns { flex-direction:column; }
+}
+@media(max-width:360px) {
+  #einvoicing-modal .ei-header h2 { font-size:1rem; }
+  #einvoicing-modal .ei-sources a { font-size:11px; }
+}
+</style>
+<div id="einvoicing-modal" onclick="if(event.target===this)closeEinvoicingModal()" style="display:none; position:fixed; inset:0; z-index:6000; background:rgba(0,0,0,0.6); overflow-y:auto; padding:16px;">
+  <div class="ei-inner">
+    <!-- HEADER FR -->
+    <div class="ei-header" data-fr>
+      <div class="ei-tag">⚡ Réforme officielle 2026</div>
+      <h2>Facturation électronique B2B<br>obligatoire au 1er septembre 2026</h2>
+      <p>La DGFiP (Direction Générale des Finances Publiques) impose la généralisation de la facturation électronique entre entreprises assujetties à la TVA en France.</p>
     </div>
-    <!-- Content -->
-    <div style="padding:32px 36px;">
-      <div style="background:#fffbeb; border-left:4px solid #f59e0b; border-radius:8px; padding:16px 18px; margin-bottom:24px;">
-        <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:#b45309; margin-bottom:6px;">⚠️ Dates clés à retenir</div>
-        <ul style="list-style:none; padding:0;">
-          <li style="display:flex; gap:10px; font-size:0.88rem; color:#334155; margin-bottom:8px; align-items:flex-start;"><span style="color:#f59e0b; font-weight:700; flex-shrink:0;">→</span><span><strong>1er sept. 2026 :</strong> Réception obligatoire de factures électroniques pour toutes les entreprises</span></li>
-          <li style="display:flex; gap:10px; font-size:0.88rem; color:#334155; margin-bottom:8px; align-items:flex-start;"><span style="color:#f59e0b; font-weight:700; flex-shrink:0;">→</span><span><strong>1er sept. 2027 :</strong> Émission obligatoire de factures électroniques pour toutes les entreprises</span></li>
+    <!-- HEADER ES -->
+    <div class="ei-header" data-es>
+      <div class="ei-tag">⚡ Reforma oficial 2026</div>
+      <h2>Facturación electrónica B2B<br>obligatoria en España — Ley Crea y Crece</h2>
+      <p>La AEAT (Agencia Estatal de Administración Tributaria) impulsa la generalización de la facturación electrónica entre empresas en España mediante la <strong style="color:#fbbf24;">Ley Crea y Crece</strong>, en línea con la directiva europea.</p>
+    </div>
+
+    <!-- BODY FR -->
+    <div class="ei-body" data-fr>
+      <div class="ei-alert">
+        <div class="ei-alert-title">⚠️ Dates clés à retenir</div>
+        <ul>
+          <li><span class="arr">→</span><span><strong>1er sept. 2026 :</strong> Réception obligatoire de factures électroniques pour toutes les entreprises</span></li>
+          <li><span class="arr">→</span><span><strong>1er sept. 2027 :</strong> Émission obligatoire de factures électroniques pour toutes les entreprises</span></li>
         </ul>
       </div>
-      <div style="margin-bottom:24px;">
-        <h4 style="font-size:0.9rem; font-weight:700; color:#1e3a5f; margin-bottom:12px;">Deux voies pour se conformer :</h4>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-          <div style="background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:10px; padding:14px;">
-            <div style="font-size:12px; font-weight:700; color:#1e3a5f; margin-bottom:6px;">🏛 PPF (Portail Public)</div>
-            <div style="font-size:12px; color:#64748b; line-height:1.5;">Solution gratuite de l'État. Adapté aux TPE/PME. Fonctionnalités de base.</div>
-          </div>
-          <div style="background:#eff6ff; border:1.5px solid #2563eb; border-radius:10px; padding:14px;">
-            <div style="font-size:12px; font-weight:700; color:#1e3a5f; margin-bottom:6px;">🔷 PDP (Opérateurs privés)</div>
-            <div style="font-size:12px; color:#64748b; line-height:1.5;">Agréés DGFiP. Intégration ERP, workflows avancés, archivage légal.</div>
-          </div>
+      <div class="ei-voies">
+        <h4>Deux voies pour se conformer :</h4>
+        <div class="ei-grid">
+          <div class="ei-box ei-box-gray"><div class="ei-box-title">🏛 PPF (Portail Public)</div><div class="ei-box-desc">Solution gratuite de l'État. Adapté aux TPE/PME. Fonctionnalités de base.</div></div>
+          <div class="ei-box ei-box-blue"><div class="ei-box-title">🔷 PDP (Opérateurs privés)</div><div class="ei-box-desc">Agréés DGFiP. Intégration ERP, workflows avancés, archivage légal.</div></div>
         </div>
       </div>
-      <div style="margin-bottom:24px;">
-        <h4 style="font-size:0.9rem; font-weight:700; color:#1e3a5f; margin-bottom:10px;">Sources officielles :</h4>
-        <ul style="list-style:none; padding:0;">
-          <li style="margin-bottom:8px;"><a href="https://www.impots.gouv.fr/portail/node/13464" target="_blank" rel="noopener" style="font-size:13px; color:#2563eb; text-decoration:none; display:flex; align-items:center; gap:6px;">↗ Portail PPF officiel — impots.gouv.fr</a></li>
-          <li style="margin-bottom:8px;"><a href="https://www.impots.gouv.fr/je-consulte-la-liste-des-plateformes-agreees" target="_blank" rel="noopener" style="font-size:13px; color:#2563eb; text-decoration:none; display:flex; align-items:center; gap:6px;">↗ Liste des PDP agréés — DGFiP</a></li>
-          <li style="margin-bottom:8px;"><a href="https://www.cnil.fr" target="_blank" rel="noopener" style="font-size:13px; color:#2563eb; text-decoration:none; display:flex; align-items:center; gap:6px;">↗ CNIL — Conformité RGPD</a></li>
-          <li><a href="https://www.afnor.org" target="_blank" rel="noopener" style="font-size:13px; color:#2563eb; text-decoration:none; display:flex; align-items:center; gap:6px;">↗ AFNOR — Norme NF Z42-020</a></li>
+      <div class="ei-sources">
+        <h4>Sources officielles :</h4>
+        <ul>
+          <li><a href="https://www.impots.gouv.fr/portail/node/13464" target="_blank" rel="noopener">↗ Portail PPF officiel — impots.gouv.fr</a></li>
+          <li><a href="https://www.impots.gouv.fr/je-consulte-la-liste-des-plateformes-agreees" target="_blank" rel="noopener">↗ Liste des PDP agréés — DGFiP</a></li>
+          <li><a href="https://www.cnil.fr" target="_blank" rel="noopener">↗ CNIL — Conformité RGPD</a></li>
+          <li><a href="https://www.afnor.org" target="_blank" rel="noopener">↗ AFNOR — Norme NF Z42-020</a></li>
         </ul>
       </div>
-      <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; padding-top:16px; border-top:1px solid #f1f5f9;">
-        <a href="#" onclick="closeEinvoicingModal(); openGuideModal(); return false;" style="display:inline-flex; align-items:center; gap:7px; font-size:14px; font-weight:700; color:white; background:#2563eb; border-radius:8px; padding:11px 20px; text-decoration:none;">📋 Lire le guide complet →</a>
-        <a href="#" onclick="closeEinvoicingModal(); setTimeout(function(){ document.querySelector('.btn-hero').scrollIntoView({behavior:'smooth'}); }, 200); return false;" style="display:inline-flex; align-items:center; gap:7px; font-size:13px; font-weight:600; color:#475569; background:#f1f5f9; border-radius:8px; padding:11px 18px; text-decoration:none;">🔍 Faire le diagnostic</a>
+      <div class="ei-btns">
+        <a href="#" onclick="closeEinvoicingModal(); openGuideModal(); return false;" class="ei-btn-prim">📋 Lire le guide complet →</a>
+        <a href="#" onclick="closeEinvoicingModal(); setTimeout(function(){ document.querySelector('.btn-hero').scrollIntoView({behavior:'smooth'}); },200); return false;" class="ei-btn-sec">🔍 Faire le diagnostic</a>
+      </div>
+    </div>
+
+    <!-- BODY ES -->
+    <div class="ei-body" data-es>
+      <div class="ei-alert">
+        <div class="ei-alert-title">⚠️ Fechas clave — España (Ley Crea y Crece)</div>
+        <ul>
+          <li><span class="arr">→</span><span><strong>Desde julio 2025 :</strong> Grandes empresas con facturación anual superior a 8 millones de euros — obligación de emitir y recibir facturas electrónicas B2B</span></li>
+          <li><span class="arr">→</span><span><strong>Desde enero 2026 :</strong> Resto de empresas y autónomos — obligación de emitir y recibir facturas electrónicas B2B</span></li>
+          <li><span class="arr">→</span><span><strong>Formato obligatorio :</strong> Factura-e (XML), FacturaE 3.2.x — compatible con FACe y FACeB2B</span></li>
+          <li><span class="arr">→</span><span><strong>Operadoras privadas (ESF) :</strong> Plataformas interoperables homologadas por la AEAT para el intercambio B2B</span></li>
+        </ul>
+      </div>
+      <div class="ei-voies">
+        <h4>Dos vías para cumplir la normativa :</h4>
+        <div class="ei-grid">
+          <div class="ei-box ei-box-gray"><div class="ei-box-title">🏛 FACe / AEAT (Pública)</div><div class="ei-box-desc">Solución gratuita del Estado. Adaptado a micropymes. Funcionalidades básicas.</div></div>
+          <div class="ei-box ei-box-blue"><div class="ei-box-title">🔷 ESF (Operadores privados)</div><div class="ei-box-desc">Homologados AEAT. Integración ERP, workflows avanzados, archivo legal.</div></div>
+        </div>
+      </div>
+      <div class="ei-sources">
+        <h4>🇪🇸 España — Fuentes oficiales :</h4>
+        <ul>
+          <li><a href="https://www.agenciatributaria.es/AEAT.internet/Inicio/Ayuda/Manuales__Folletos_y_Videos/Folletos__Informativos/Facturacion_Electronica/Proyecto_de_Solucion_Publica_de_Facturacion_Electronica_B2B__Ley_Crea_y_Crece_/Proyecto_de_Solucion_Publica_de_Facturacion_Electronica_B2B__Ley_Crea_y_Crece_.shtml" target="_blank" rel="noopener">↗ AEAT — Solución Pública B2B (Ley Crea y Crece)</a></li>
+          <li><a href="https://www.facturae.gob.es/face/Paginas/FACeB2B.aspx" target="_blank" rel="noopener">↗ FACeB2B — Plataformas privadas interoperables</a></li>
+          <li><a href="https://www.facturae.gob.es/dire/Paginas/Index.aspx" target="_blank" rel="noopener">↗ DIRe — Directorio de receptores</a></li>
+          <li><a href="https://www.facturae.gob.es/face/Paginas/Index.aspx" target="_blank" rel="noopener">↗ FACe — Portal público AP</a></li>
+          <li><a href="https://www.aepd.es" target="_blank" rel="noopener">↗ AEPD — Protección de datos (RGPD)</a></li>
+        </ul>
+        <h4 style="margin-top:12px;">🇫🇷 Francia — Fuentes oficiales :</h4>
+        <ul>
+          <li><a href="https://www.impots.gouv.fr/portail/node/13464" target="_blank" rel="noopener">↗ Portal PPF — impots.gouv.fr</a></li>
+          <li><a href="https://www.impots.gouv.fr/je-consulte-la-liste-des-plateformes-agreees" target="_blank" rel="noopener">↗ Lista PDP homologados — DGFiP</a></li>
+        </ul>
+      </div>
+      <div class="ei-btns">
+        <a href="#" onclick="closeEinvoicingModal(); openGuideModal(); return false;" class="ei-btn-prim">📋 Leer la guía completa →</a>
+        <a href="#" onclick="closeEinvoicingModal(); setTimeout(function(){ document.querySelector('.btn-hero').scrollIntoView({behavior:'smooth'}); },200); return false;" class="ei-btn-sec">🔍 Hacer el diagnóstico</a>
       </div>
     </div>
   </div>
