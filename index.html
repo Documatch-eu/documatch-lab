@@ -18,8 +18,20 @@
 <meta name="twitter:title" content="Documatch Lab — Diagnostic GED 2026">
 <link rel="canonical" href="https://lab.documatch.eu">
 <style>
-/* ANTI-FLASH: applied synchronously before first paint */
-[data-es] { display: none !important; }
+/* ANTI-FLASH: page-level only, never inside modals */
+body:not(.lang-es) > * [data-es],
+body.lang-fr [data-es] { display: none !important; }
+
+/* Modal lang system via CSS classes on the modal itself */
+#einvoicing-modal.show-fr [data-es] { display: none !important; }
+#einvoicing-modal.show-fr [data-fr] { display: block !important; }
+#einvoicing-modal.show-es [data-fr] { display: none !important; }
+#einvoicing-modal.show-es [data-es] { display: block !important; }
+
+#guide-modal.show-fr [data-es] { display: none !important; }
+#guide-modal.show-fr [data-fr] { display: block !important; }
+#guide-modal.show-es [data-fr] { display: none !important; }
+#guide-modal.show-es [data-es] { display: block !important; }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1666,10 +1678,10 @@ footer {
       <div class="footer-col">
         <h4 id="ft-col1-title">Réforme 2026</h4>
         <ul>
-          <li><a href="#" id="ft-link-einvoicing" onclick="openEinvoicingModal();return false;">E-invoicing France</a></li>
+          <li><a href="#" id="ft-link-einvoicing" onclick="openEinvoicingModal();return false;"><span id="ft-link-einvoicing-txt">E-invoicing France</span></a></li>
           <li><a href="https://www.impots.gouv.fr/portail/node/13464" id="ft-link-ppf" target="_blank">Portail PPF</a></li>
           <li><a href="https://www.impots.gouv.fr/je-consulte-la-liste-des-plateformes-agreees" id="ft-link-pdp" target="_blank">PDP Agréés</a></li>
-          <li><a href="#" id="ft-link-guide" onclick="openGuideModal();return false;">Guide conformité</a></li>
+          <li><a href="#" id="ft-link-guide" onclick="openGuideModal();return false;"><span id="ft-link-guide-txt">Guide conformité</span></a></li>
         </ul>
       </div>
 
@@ -1695,11 +1707,11 @@ footer {
 
     <div class="footer-bottom">
       <div class="footer-legal">
-        <a href="#" id="ft-mentions" onclick="openModal('mentions-modal');return false;">Mentions légales</a>
-        <a href="#" id="ft-rgpd" onclick="openModal('rgpd-modal');return false;">Politique de confidentialité</a>
+        <a href="#" onclick="openModal('mentions-modal');return false;"><span id="ft-mentions">Mentions légales</span></a>
+        <a href="#" onclick="openModal('rgpd-modal');return false;"><span id="ft-rgpd">Politique de confidentialité</span></a>
         <a href="#" onclick="openModal('cgu-modal');return false;">CGU</a>
         <a href="#" onclick="openModal('cookies-modal');return false;">Cookies</a>
-        <a href="mailto:info@documatch.eu" id="ft-contact">Contact</a>
+        <a href="mailto:info@documatch.eu"><span id="ft-contact">Contact</span></a>
       </div>
       <p class="footer-copy">© 2026 Documatch.eu — Tous droits réservés.</p>
       <div class="footer-countries">
@@ -1737,10 +1749,10 @@ function setLang(lang) {
       'ft-brand-desc': 'Comparateur indépendant de logiciels de gestion documentaire (GED/DMS).',
       'ft-col1-title': 'Réforme 2026',
       'ft-col2-title': 'Contact',
-      'ft-link-einvoicing': 'E-invoicing France',
+      'ft-link-einvoicing-txt': 'E-invoicing France',
       'ft-link-ppf': 'Portail PPF',
       'ft-link-pdp': 'PDP Agréés',
-      'ft-link-guide': 'Guide conformité',
+      'ft-link-guide-txt': 'Guide conformité',
       'ft-ssl': 'SSL Sécurisé',
       'ft-mentions': 'Mentions légales',
       'ft-rgpd': 'Politique de confidentialité',
@@ -1750,10 +1762,10 @@ function setLang(lang) {
       'ft-brand-desc': 'Comparador independiente de software de gestión documental (GED/DMS).',
       'ft-col1-title': 'Reforma 2026',
       'ft-col2-title': 'Contacto',
-      'ft-link-einvoicing': 'Facturación electrónica',
+      'ft-link-einvoicing-txt': 'Facturación electrónica',
       'ft-link-ppf': 'FACe — Factura electrónica',
       'ft-link-pdp': 'ESF Homologados AEAT',
-      'ft-link-guide': 'Guía conformidad',
+      'ft-link-guide-txt': 'Guía conformidad',
       'ft-ssl': 'SSL Seguro',
       'ft-mentions': 'Aviso legal',
       'ft-rgpd': 'Política de privacidad',
@@ -1780,15 +1792,27 @@ function setLang(lang) {
     if (el) el.textContent = translations[id];
   });
   Object.keys(hrefs).forEach(function(id) {
-    var el = document.getElementById(id);
+    var el = document.getElementById(id + '-a') || document.getElementById(id);
     if (el) el.href = hrefs[id];
   });
 
+  // Toggle page-level data-fr/data-es (skip modal internals — handled by CSS classes)
   document.querySelectorAll('[data-fr]').forEach(function(el) {
+    if (el.closest('#guide-modal') || el.closest('#einvoicing-modal')) return;
     el.style.display = lang === 'fr' ? '' : 'none';
   });
   document.querySelectorAll('[data-es]').forEach(function(el) {
+    if (el.closest('#guide-modal') || el.closest('#einvoicing-modal')) return;
     el.style.display = lang === 'es' ? '' : 'none';
+  });
+
+  // Update open modals via class
+  ['guide-modal','einvoicing-modal'].forEach(function(modalId) {
+    var m = document.getElementById(modalId);
+    if (m && m.style.display !== 'none') {
+      m.classList.remove('show-fr','show-es');
+      m.classList.add('show-' + lang);
+    }
   });
 
   try { localStorage.setItem('dm_lang', lang); } catch(e) {}
@@ -2809,28 +2833,29 @@ function restartQuiz() {
 
     <h2 id="section-risques-es">6. Los riesgos en caso de incumplimiento</h2>
     <div class="info-box red">
-      <div class="info-box-title">🚨 Sanciones aplicables</div>
-      <p>El incumplimiento de las obligaciones de facturación electrónica expone a la empresa a <strong>multas de hasta 15 euros por factura</strong> no conforme, con un límite de 15.000 euros anuales. Las infracciones del RGPD pueden acarrear sanciones de hasta el <strong>4% de la facturación mundial</strong>.</p>
+      <div class="info-box-title">🚨 Sanciones aplicables en España</div>
+      <p>La <strong>Ley Crea y Crece</strong> establece sanciones para las empresas que no cumplan con la obligación de facturación electrónica B2B. Las infracciones del RGPD pueden acarrear sanciones de hasta el <strong>4% de la facturación mundial</strong> según la AEPD.</p>
     </div>
     <ul>
-      <li>Imposibilidad de recibir facturas de proveedores tras el 1 sept. 2026</li>
+      <li>Multas de hasta <strong>10.000 € por incumplimiento</strong> de la obligación de facturación electrónica (Ley Crea y Crece, art. 12)</li>
+      <li>Imposibilidad de recibir facturas de proveedores tras enero 2026 (grandes empresas) y desde 2026 resto</li>
       <li>Bloqueo de los procesos contables y de la cadena de suministro</li>
-      <li>Multas fiscales por incumplimiento de la normativa del IVA</li>
-      <li>Riesgo de inspección fiscal en caso de archivo no conforme</li>
-      <li>Pérdida de credibilidad ante los socios comerciales</li>
+      <li>Riesgo de inspección de la AEAT en caso de archivo no conforme o facturas no válidas</li>
+      <li>Exclusión de licitaciones públicas por incumplimiento de FACe/FACeB2B</li>
+      <li>Pérdida de credibilidad ante socios comerciales y clientes</li>
     </ul>
 
     <h2 id="section-plan-es">7. ¿Por dónde empezar? Los 5 pasos clave</h2>
     <div class="info-box green">
       <div class="info-box-title">✅ Plan de acción recomendado por Documatch</div>
-      <p>Siga estos 5 pasos en orden para estructurar su proyecto de conformidad documental antes de septiembre de 2026.</p>
+      <p>Siga estos 5 pasos en orden para estructurar su proyecto de conformidad documental antes de <strong>julio 2025</strong> (grandes empresas) o <strong>enero 2026</strong> (resto de empresas).</p>
     </div>
     <ul>
-      <li><strong>Paso 1 — Auditoría de lo existente:</strong> cartografíe sus flujos de facturas (volúmenes, formatos, canales) e identifique las carencias de su sistema actual.</li>
-      <li><strong>Paso 2 — Elección PPF o PDP:</strong> evalúe su volumen documental, su ERP y su necesidad de automatización para elegir la vía adecuada.</li>
-      <li><strong>Paso 3 — Selección GED/DMS:</strong> compare las soluciones compatibles con su ERP en Documatch.eu entre más de 200 herramientas referenciadas.</li>
-      <li><strong>Paso 4 — Despliegue e integración:</strong> planifique 3 a 6 meses para el despliegue, la formación y las pruebas de integración ERP.</li>
-      <li><strong>Paso 5 — Formación y gestión del cambio:</strong> involucre a los equipos contables, administrativos e IT desde el inicio del proyecto.</li>
+      <li><strong>Paso 1 — Auditoría de lo existente:</strong> cartografíe sus flujos de facturas (volúmenes, formatos, canales) e identifique las carencias frente a los requisitos de la Ley Crea y Crece.</li>
+      <li><strong>Paso 2 — Elección FACe/FACeB2B o ESF:</strong> evalúe su volumen documental, su ERP y su necesidad de automatización para elegir entre la plataforma pública o un operador privado homologado por la AEAT.</li>
+      <li><strong>Paso 3 — Selección GED/DMS:</strong> compare las soluciones compatibles con su ERP en Documatch.eu entre más de 200 herramientas referenciadas, con soporte para FacturaE 3.2.x.</li>
+      <li><strong>Paso 4 — Despliegue e integración:</strong> planifique 3 a 6 meses para el despliegue, la formación y las pruebas de integración ERP con FACeB2B o su ESF.</li>
+      <li><strong>Paso 5 — Formación y gestión del cambio:</strong> involucre a los equipos contables, administrativos e IT desde el inicio del proyecto para garantizar la adopción.</li>
     </ul>
 
     <div class="info-box blue" style="margin-top:32px;">
@@ -2885,8 +2910,12 @@ function restartQuiz() {
 
 <script>
 function openGuideModal() {
-  document.getElementById("guide-modal").style.display = "block";
-  document.body.style.overflow = "hidden";
+  var modal = document.getElementById("guide-modal");
+  var lang = currentLang || 'fr';
+  modal.classList.remove('show-fr', 'show-es');
+  modal.classList.add('show-' + lang);
+  modal.style.display = 'block';
+  document.body.style.overflow = 'hidden';
 }
 function closeGuideModal() {
   document.getElementById("guide-modal").style.display = "none";
@@ -3034,7 +3063,11 @@ function closeGuideModal() {
 </div>
 <script>
 function openEinvoicingModal() {
-  document.getElementById('einvoicing-modal').style.display = 'block';
+  var modal = document.getElementById('einvoicing-modal');
+  var lang = currentLang || 'fr';
+  modal.classList.remove('show-fr', 'show-es');
+  modal.classList.add('show-' + lang);
+  modal.style.display = 'block';
   document.body.style.overflow = 'hidden';
 }
 function closeEinvoicingModal() {
